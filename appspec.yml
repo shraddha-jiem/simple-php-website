@@ -1,0 +1,31 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /var/www/html
+    overwrite: yes
+permissions:
+  - object: /var/www/html
+    pattern: "**"
+    owner: apache
+    group: ec2-user
+    mode: 664
+    type:
+      - file
+  - object: /var/www/html
+    pattern: "**"
+    owner: apache
+    group: ec2-user
+    mode: 775
+    type:
+      - directory
+# hooks:
+#   BeforeInstall:
+#     - location: scripts/stop_apache.sh
+#       timeout: 300
+#       runas: root
+#   ApplicationStart:
+#     - location: scripts/start_apache.sh
+#       timeout: 300
+#       runas: root
+      
