@@ -60,7 +60,15 @@ jobs:
            --file-exists-behavior OVERWRITE \
            --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip
           echo "deployment_id=$deploymentId" >> $GITHUB_OUTPUT
+          echo "deployment_id0=$deploymentId" >> $GITHUB_ENV
 
+      - name: Get variables, outputs
+        run: |
+           echo 1: ${{ steps.deployment.outputs.deployment_id }}
+           echo 2: ${{ steps.deployment.outputs.deploymentId }}
+           echo 3: ${{ github.deploymentId }}
+           echo 4: ${{ env.deployment_id0 }}
+           
       - name: Check AWS CodeDeploy Deployment
         run: |
           aws deploy wait deployment-successful --deployment-id ${{ steps.deployment.outputs.deployment_id }}
