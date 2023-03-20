@@ -19,7 +19,7 @@ jobs:
         appname: ['aws-codedeploy-app']
         deploy-group: ['poc']
         s3-bucket: ['aws-codedeploy-poc']
-        s3-filename: ['poc-aws-codedeploy-${{ github.sha }}']
+        s3-filename: ['poc-aws-codedeploy-${{ github.run_number }}']
 
     steps:
       - uses: actions/checkout@v2
@@ -51,6 +51,7 @@ jobs:
 
       # Create deployment to CodeDeploy
       - name: AWS Create Deployment
+        id: deployment
         run: |
           aws deploy create-deployment \
            --application-name ${{ matrix.appname }} \
@@ -58,3 +59,8 @@ jobs:
            --deployment-group-name ${{ matrix.deploy-group }} \
            --file-exists-behavior OVERWRITE \
            --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip \
+
+      - name: Check the AWS CodeDeploy Deployment
+        run: |
+          aws deploy wait deployment-successful --deployment-id ${{ steps.deployment.outputs.deploymentId }}
+          
