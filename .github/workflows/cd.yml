@@ -68,7 +68,7 @@ jobs:
           echo 4: ${{ env.deployment_id0 }}
           echo 5: $deploymentId
            
-      - name: Check AWS CodeDeploy Deployment
-        run: |
-          aws deploy wait deployment-successful --deployment-id ${{ steps.deployment.outputs.deployment_id }}
+#       - name: Check AWS CodeDeploy Deployment
+#         run: |
+#           aws deploy wait deployment-successful --deployment-id ${{ steps.deployment.outputs.deployment_id }}
           
