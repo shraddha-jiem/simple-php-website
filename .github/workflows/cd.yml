@@ -1,15 +1,13 @@
 name: CD
 
 on:
-  push:
-    branches:
-      - poc
   pull_request:
-    branches:
-      - poc
+    branches: [poc]
+    types: [closed]
 
 jobs:
   deploy:
+    if: ${{github.event.pull_request.merged == true && github.ref_name == 'poc'}}
     name: CD Pipeline
     runs-on: ubuntu-latest
     environment: poc
@@ -58,7 +56,7 @@ jobs:
            --deployment-config-name CodeDeployDefault.OneAtATime \
            --deployment-group-name ${{ matrix.deploy-group }} \
            --file-exists-behavior OVERWRITE \
-           --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip
+           --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip >> $GITHUB_OUTPUT
 
       - name: Get variables, outputs
         run: |
@@ -68,6 +66,7 @@ jobs:
           echo 2: ${{ steps.deployment.outputs.deploymentId }}
           echo 3: ${{ github.deploymentId }}
           echo 4: ${{ env.deployment_id0 }}
+          echo 5: $deploymentId
            
       - name: Check AWS CodeDeploy Deployment
         run: |
