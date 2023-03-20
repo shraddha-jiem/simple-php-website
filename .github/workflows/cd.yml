@@ -50,13 +50,15 @@ jobs:
       - name: AWS Create Deployment
         id: deployment
         run: |
-          aws deploy create-deployment \
+          DEPLOYMENT_ID=$(aws deploy create-deployment \
            --application-name ${{ matrix.appname }} \
            --deployment-config-name CodeDeployDefault.OneAtATime \
            --deployment-group-name ${{ matrix.deploy-group }} \
            --file-exists-behavior OVERWRITE \
-           --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip
-          echo "ID: $deploymentId"
+           --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip --output text)
+          echo "deployment_id=$DEPLOYMENT_ID" >> $GITHUB_OUTPUT
+          echo "DIST_ID=$DEPLOYMENT_ID" >> $GITHUB_ENV
+      - run: echo ${{ env.DIST_ID }}
 
       - name: Get variables, outputs
         run: |
