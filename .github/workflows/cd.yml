@@ -58,7 +58,7 @@ jobs:
            --deployment-config-name CodeDeployDefault.OneAtATime \
            --deployment-group-name ${{ matrix.deploy-group }} \
            --file-exists-behavior OVERWRITE \
-           --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip \
+           --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip
           echo "::set-output name=deployment_id::$deploymentId"
 
       - name: Check the AWS CodeDeploy Deployment
