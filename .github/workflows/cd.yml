@@ -61,7 +61,7 @@ jobs:
            --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip
           echo "deployment_id=$deploymentId" >> $GITHUB_OUTPUT
 
-      - name: Check the AWS CodeDeploy Deployment
+      - name: Check AWS CodeDeploy Deployment
         run: |
           aws deploy wait deployment-successful --deployment-id ${{ steps.deployment.outputs.deployment_id }}
           
