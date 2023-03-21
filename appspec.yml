@@ -7,13 +7,11 @@ files:
 permissions:
   - object: /var/www/html
     pattern: "**"
-    group: ec2-user
     mode: 664
     type:
       - file
   - object: /var/www/html
     pattern: "**"
-    group: ec2-user
     mode: 775
     type:
       - directory
