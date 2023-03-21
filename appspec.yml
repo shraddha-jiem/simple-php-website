@@ -7,14 +7,12 @@ files:
 permissions:
   - object: /var/www/html
     pattern: "**"
-    owner: apache
     group: ec2-user
     mode: 664
     type:
       - file
   - object: /var/www/html
     pattern: "**"
-    owner: apache
     group: ec2-user
     mode: 775
     type:
