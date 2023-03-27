@@ -19,13 +19,8 @@ permissions:
     mode: 775
     type:
       - directory
-# hooks:
-#   BeforeInstall:
-#     - location: scripts/stop_apache.sh
-#       timeout: 300
-#       runas: root
-#   ApplicationStart:
-#     - location: scripts/start_apache.sh
-#       timeout: 300
-#       runas: root
-      
+      runas: root
+hooks:
+   BeforeInstall:
+    - location: scripts/install.sh
+      runas: root
