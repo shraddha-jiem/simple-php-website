@@ -19,4 +19,3 @@ permissions:
     mode: 775
     type:
       - directory
-      runas: root
