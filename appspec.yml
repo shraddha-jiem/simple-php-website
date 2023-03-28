@@ -19,3 +19,10 @@ permissions:
     mode: 775
     type:
       - directory
+hooks:
+#    BeforeInstall:
+#     - location: scripts/install.sh
+#       runas: root
+    ApplicationStart:
+      - location: scripts/restart.sh
+        runas: root
