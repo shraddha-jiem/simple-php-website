@@ -14,9 +14,9 @@ jobs:
     strategy:
       matrix:
         appname: ['aws-codedeploy-app']
-        deploy-group: ['poc']
-        s3-bucket: ['aws-codedeploy-poc']
-        s3-filename: ['poc-aws-codedeploy-${{ github.run_number }}']
+        deploy-group: ['poc-php']
+        s3-bucket: ['aws-codedeploy-poc-php']
+        s3-filename: ['poc-php-${{ github.run_number }}']
 
     steps:
       - uses: actions/checkout@v3
