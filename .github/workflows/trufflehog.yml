@@ -3,7 +3,7 @@ name: Trufflehog-Trial
 on:
   push:
     branches:
-      - master
+      - master-test
   pull_request:
 
 permissions:
@@ -30,7 +30,7 @@ jobs:
         continue-on-error: true
         with:
           path: ./
-          base: "${{ github.event.repository.default_branch }}"
+          base: "master-test"
           head: HEAD
           extra_args: --debug
 
