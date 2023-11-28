@@ -33,8 +33,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
-          aws-access-key-id: "SDFDSCC4243SC"
-          aws-secret-access-key: "ewr3242wfdfwerweRere3434ddwd"
+          aws-access-key-id: "AKIA4SVIBXABE4KV6Z9R"
+          aws-secret-access-key: "Aewr3242wfdfwerweRere3434ddwd"
           aws-region: us-east-1
 
       # Deploy push to AWS S3

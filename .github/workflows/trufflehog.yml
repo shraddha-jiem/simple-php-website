@@ -26,13 +26,7 @@ jobs:
 
       - name: TruffleHog OSS
         id: trufflehog
-        uses: trufflesecurity/trufflehog@add-actions-cli-switch
-        continue-on-error: true
-        with:
-          path: ./
-          base: "master-test"
-          head: HEAD
-          extra_args: --debug
+        uses: edplato/trufflehog-actions-scan
 
       - name: Scan Results Status
         if: steps.trufflehog.outcome == 'failure'
