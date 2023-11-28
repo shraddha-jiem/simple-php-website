@@ -2,11 +2,12 @@ name: CD - TH
 
 on:
   push:
-    branches: [trufflehog-trial]
+    branches: 
+      - trufflehog-trial
 
 jobs:
   deploy:
-    if: ${{github.event.pull_request.merged == true && github.ref_name == 'trufflehog-trial'}}
+    # if: ${{github.event.pull_request.merged == true && github.ref_name == 'trufflehog-trial'}}
     name: CD Pipeline
     runs-on: ubuntu-latest
     environment: poc
