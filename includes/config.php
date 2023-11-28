@@ -20,7 +20,6 @@ function config($key = '')
         'template_path' => 'template',
         'content_path' => 'content',
         'version' => 'v3.1',
-        'password' => 'ds#123@ui'
     ];
 
     return isset($config[$key]) ? $config[$key] : null;
