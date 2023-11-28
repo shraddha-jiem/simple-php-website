@@ -26,7 +26,7 @@ jobs:
 
       - name: TruffleHog OSS
         id: trufflehog
-        uses: trufflesecurity/trufflehog@main
+        uses: trufflesecurity/trufflehog@add-actions-cli-switch
         continue-on-error: true
         with:
           path: ./
