@@ -25,7 +25,7 @@ jobs:
           fetch-depth: 0
 
       - name: TruffleHog Actions Scan
-        uses: edplato/trufflehog-actions-scan
+        uses: edplato/trufflehog-actions-scan@master
         # uses: shraddha-jiem/trufflehog-actions-scan@master
         # with: 
         #   scanArguments: "--regex --max_depth=10 --rules /regexes.json"
