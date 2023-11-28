@@ -1,9 +1,9 @@
 name: CD - TH
 
 on:
-  push:
-    branches: 
-      - trufflehog-trial
+  # push:
+  #   branches: 
+  #     - trufflehog-trial
 
 jobs:
   deploy:
