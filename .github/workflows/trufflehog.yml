@@ -2,9 +2,9 @@ name: Trufflehog-Trial
 
 on:
   push:
-  pull_request:
     branches:
-      - trufflehog-trial
+      - master
+  pull_request:
 
 permissions:
   contents: read
@@ -30,7 +30,7 @@ jobs:
         continue-on-error: true
         with:
           path: ./
-          base: "trufflehog-trial"
+          base: "${{ github.event.repository.default_branch }}"
           head: HEAD
           extra_args: --debug
 
