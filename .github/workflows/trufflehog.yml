@@ -27,7 +27,6 @@ jobs:
       - name: TruffleHog Actions Scan
         uses: shraddha-jiem/trufflehog-actions-scan@master
         with: 
-          branch: ${{ github.head.ref }}
           scanArguments: "--regex --max-depth=10 --rules /regexes.json"
       
 
