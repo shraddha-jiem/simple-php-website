@@ -2,9 +2,9 @@ name: Trufflehog-Trial
 
 on:
   push:
-    branches:
-      - main-test
   pull_request:
+    branches:
+      - trufflehog-trial
 
 permissions:
   contents: read
