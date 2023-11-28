@@ -27,7 +27,7 @@ jobs:
       - name: TruffleHog Actions Scan
         uses: shraddha-jiem/trufflehog-actions-scan@master
         with: 
-          scanArguments: "--regex --max-depth=10 --rules /regexes.json"
+          scanArguments: "--regex --max_depth=10 --rules /regexes.json"
       
 
       
