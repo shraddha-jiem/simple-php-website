@@ -49,11 +49,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ZAP Scan
-        uses: zaproxy/action-baseline@v0.10.0
+        uses: zaproxy/action-baseline@v0.3.0
         with:
           target: 'https://www.zaproxy.org'
 
-          
+
       
 
       
