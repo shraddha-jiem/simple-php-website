@@ -43,6 +43,17 @@ jobs:
         # uses: shraddha-jiem/trufflehog-actions-scan@master
         # with: 
         #   scanArguments: "--regex --max_depth=10 --rules /regexes.json"
+  
+
+  ZapBaseline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ZAP Scan
+        uses: zaproxy/action-baseline@v0.10.0
+        with:
+          target: 'https://www.zaproxy.org'
+
+          
       
 
       
