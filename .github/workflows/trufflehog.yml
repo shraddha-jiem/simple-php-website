@@ -52,7 +52,7 @@ jobs:
       - name: ZAP Scan
         uses: zaproxy/action-baseline@v0.10.0
         with:
-          target: 'https://ore-dev.jiem.in'
+          target: 'https://www2.dev-eiken-cbt.jiem.co.jp/spradm/index/login'
           rules_file_name: '.zap/rules.tsv'
 
 
