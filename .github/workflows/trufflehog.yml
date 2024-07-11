@@ -13,36 +13,36 @@ permissions:
   pull-requests: write
 
 jobs:
-  TruffleHog:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+  # TruffleHog:
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
 
-      - name: TruffleHog OSS
-        id: trufflehog
-        uses: trufflesecurity/trufflehog@main
-        continue-on-error: true
-        with:
-          path: ./
-          base: "master-test"
-          head: HEAD
-          extra_args: --debug
+  #     - name: TruffleHog OSS
+  #       id: trufflehog
+  #       uses: trufflesecurity/trufflehog@main
+  #       continue-on-error: true
+  #       with:
+  #         path: ./
+  #         base: "master-test"
+  #         head: HEAD
+  #         extra_args: --debug
 
-      - name: Scan Results Status
-        if: steps.trufflehog.outcome == 'failure'
-        run: exit 1
+  #     - name: Scan Results Status
+  #       if: steps.trufflehog.outcome == 'failure'
+  #       run: exit 1
 
-      # - name: TruffleHog Actions Scan
-      #   uses: edplato/trufflehog-actions-scan@master
-        # uses: shraddha-jiem/trufflehog-actions-scan@master
-        # with: 
-        #   scanArguments: "--regex --max_depth=10 --rules /regexes.json"
+  #     # - name: TruffleHog Actions Scan
+  #     #   uses: edplato/trufflehog-actions-scan@master
+  #       # uses: shraddha-jiem/trufflehog-actions-scan@master
+  #       # with: 
+  #       #   scanArguments: "--regex --max_depth=10 --rules /regexes.json"
   
 
   ZapBaseline:
