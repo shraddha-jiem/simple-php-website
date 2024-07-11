@@ -52,7 +52,7 @@ jobs:
       - name: ZAP Scan
         uses: zaproxy/action-baseline@v0.12.0
         with:
-          target: 'https://www2.dev-eiken-cbt.jiem.co.jp/spradm/index/login'
+          target: 'https://www.yahoo.com/'
           rules_file_name: '.zap/rules.tsv'
 
 
