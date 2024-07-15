@@ -1,4 +1,4 @@
-name: Trufflehog-Trial
+name: CICD-Trial
 
 on:
   push:
@@ -16,17 +16,17 @@ jobs:
   Security:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/php@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-  ZapBaseline:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: ZAP Scan
-        uses: zaproxy/action-baseline@v0.12.0
-        with:
-          target: 'https://www.yahoo.com/'
-          rules_file_name: '.zap/rules.tsv'
+  # ZapBaseline:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: ZAP Scan
+  #       uses: zaproxy/action-baseline@v0.12.0
+  #       with:
+  #         target: 'https://www.yahoo.com/'
+  #         rules_file_name: '.zap/rules.tsv'
