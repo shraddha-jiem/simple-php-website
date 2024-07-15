@@ -30,8 +30,3 @@ jobs:
         with:
           target: 'https://www.yahoo.com/'
           rules_file_name: '.zap/rules.tsv'
-
-
-      
-
-      
