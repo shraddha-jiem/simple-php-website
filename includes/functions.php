@@ -70,7 +70,8 @@ function page_content()
         $path = getcwd() . '/' . config('content_path') . '/404.phtml';
     }
 
-    echo file_get_contents($path);
+    // Use include to process PHP code in content files
+    include $path;
 }
 
 /**
