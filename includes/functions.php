@@ -80,3 +80,32 @@ function init()
 {
     require config('template_path') . '/template.php';
 }
+
+/**
+ * Get database connection.
+ */
+function get_db_connection()
+{
+    $db_config = config('database');
+    
+    try {
+        $dsn = "mysql:host={$db_config['host']};port={$db_config['port']};dbname={$db_config['name']};charset=utf8mb4";
+        $pdo = new PDO($dsn, $db_config['username'], $db_config['password'], [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        ]);
+        return $pdo;
+    } catch (PDOException $e) {
+        error_log("Database connection failed: " . $e->getMessage());
+        return null;
+    }
+}
+
+/**
+ * Check if database is connected.
+ */
+function is_db_connected()
+{
+    $pdo = get_db_connection();
+    return $pdo !== null;
+}
