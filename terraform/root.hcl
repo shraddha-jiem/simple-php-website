@@ -6,10 +6,10 @@ remote_state {
   backend = "s3"
   
   config = {
-    bucket         = "simple-php-website-terraform-state-${get_env("AWS_ACCOUNT_ID", "123456789012")}"
+    bucket         = "iac-trial-simple-php-website-terraform-state-${get_env("AWS_ACCOUNT_ID", "034946978905")}"
     key            = "${path_relative_to_include()}/terraform.tfstate"
     region         = "us-east-1"
-    encrypt        = true
+    use_lockfile   = true
     dynamodb_table = "simple-php-website-terraform-locks"
   }
   

@@ -24,6 +24,7 @@ module "iam" {
 
   environment  = var.environment
   project_name = var.project_name
+  codestar_connection_arn  = module.deployment.codestar_connection_arn
 }
 
 # EC2 Module
@@ -69,7 +70,7 @@ module "rds" {
 
 # Deployment Module (CodePipeline)
 module "deployment" {
-  source = "../../deployment"
+  source = "./deployment"
 
   environment              = var.environment
   project_name            = var.project_name

@@ -22,3 +22,8 @@ output "s3_bucket_name" {
   description = "Name of the S3 bucket for artifacts"
   value       = aws_s3_bucket.codepipeline_artifacts.bucket
 }
+
+output "codestar_connection_arn" {
+  description = "ARN of the CodeStar connection"
+  value       = aws_codestarconnections_connection.github.arn
+}

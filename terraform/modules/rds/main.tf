@@ -2,11 +2,13 @@
 resource "random_password" "db_password" {
   length  = 16
   special = true
+  # Exclude problematic characters for RDS
+  override_special = "!#$%&*()-_=+[]{}<>:?"
 }
 
 # Store password in AWS Secrets Manager
 resource "aws_secretsmanager_secret" "db_password" {
-  name                    = "${var.project_name}-${var.environment}-db-password"
+  name                    = "${var.project_name}-${var.environment}-db-password-3"
   description             = "Database password for ${var.project_name} ${var.environment}"
   recovery_window_in_days = 7
 }

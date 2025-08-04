@@ -175,3 +175,19 @@ resource "aws_iam_role_policy" "codebuild_policy" {
     ]
   })
 }
+
+data "aws_iam_policy_document" "codepipeline_codestar" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "codestar-connections:UseConnection"
+    ]
+    resources = [var.codestar_connection_arn]
+  }
+}
+
+resource "aws_iam_role_policy" "codepipeline_codestar" {
+  name   = "CodePipelineCodeStar"
+  role   = aws_iam_role.codepipeline_role.id
+  policy = data.aws_iam_policy_document.codepipeline_codestar.json
+}

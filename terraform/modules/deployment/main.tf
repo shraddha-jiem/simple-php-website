@@ -74,7 +74,7 @@ resource "aws_codedeploy_deployment_group" "main" {
   deployment_group_name = "${var.project_name}-${var.environment}-deployment-group"
   service_role_arn      = var.codedeploy_role_arn
 
-  deployment_config_name = "CodeDeployDefault.AllAtOneTime"
+  deployment_config_name = "CodeDeployDefault.AllAtOnce"
 
   autoscaling_groups = [var.autoscaling_group_name]
 
@@ -105,6 +105,16 @@ resource "aws_codedeploy_deployment_group" "main" {
   }
 }
 
+# CodeStar Connection
+resource "aws_codestarconnections_connection" "github" {
+  name          = "${var.project_name}-${var.environment}-gh-conn"
+  provider_type = "GitHub"
+  
+  tags = {
+    Name = "${var.project_name}-${var.environment}-github-connection"
+  }
+}
+
 # CodePipeline
 resource "aws_codepipeline" "main" {
   name     = "${var.project_name}-${var.environment}-pipeline"
@@ -121,16 +131,15 @@ resource "aws_codepipeline" "main" {
     action {
       name             = "Source"
       category         = "Source"
-      owner            = "ThirdParty"
-      provider         = "GitHub"
+      owner            = "AWS"
+      provider         = "CodeStarSourceConnection"
       version          = "1"
       output_artifacts = ["source_output"]
 
       configuration = {
-        Owner      = var.github_owner
-        Repo       = var.github_repo
-        Branch     = var.github_branch
-        OAuthToken = "{{resolve:secretsmanager:github-token:SecretString:token}}"
+        ConnectionArn    = aws_codestarconnections_connection.github.arn
+        FullRepositoryId = "${var.github_owner}/${var.github_repo}"
+        BranchName       = var.github_branch
       }
     }
   }

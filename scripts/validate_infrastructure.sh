@@ -61,21 +61,21 @@ else
 fi
 
 # Check for GitHub token (optional for validation)
-echo ""
-echo "🔗 Checking GitHub token..."
-if aws secretsmanager get-secret-value --secret-id "github-token" > /dev/null 2>&1; then
-    echo "✅ GitHub token found in Secrets Manager"
-else
-    echo "⚠️  GitHub token not found in Secrets Manager"
-    echo "   Create it with:"
-    echo "   aws secretsmanager create-secret --name 'github-token' --secret-string '{\"token\":\"your-token\"}'"
-fi
+# echo ""
+# echo "🔗 Checking GitHub token..."
+# if aws secretsmanager get-secret-value --secret-id "pipeline-github-token" > /dev/null 2>&1; then
+#     echo "✅ GitHub token found in Secrets Manager"
+# else
+#     echo "⚠️  GitHub token not found in Secrets Manager"
+#     echo "   Create it with:"
+#     echo "   aws secretsmanager create-secret --name 'pipeline-github-token' --secret-string '{\"token\":\"your-token\"}'"
+# fi
 
 # Check S3 bucket and DynamoDB table
 echo ""
 echo "🪣 Checking state backend..."
 
-BUCKET_NAME="simple-php-website-terraform-state-$ACCOUNT_ID"
+BUCKET_NAME="iac-trial-simple-php-website-terraform-state-$ACCOUNT_ID"
 TABLE_NAME="simple-php-website-terraform-locks"
 
 if aws s3 ls "s3://$BUCKET_NAME" > /dev/null 2>&1; then
@@ -99,8 +99,8 @@ echo "✅ Infrastructure code is ready for deployment"
 echo "✅ Terraform configuration is valid"
 echo "✅ AWS credentials are configured"
 
-if aws secretsmanager get-secret-value --secret-id "github-token" > /dev/null 2>&1 && \
-   aws s3 ls "s3://$BUCKET_NAME" > /dev/null 2>&1 && \
+#if aws secretsmanager get-secret-value --secret-id "pipeline-github-token" > /dev/null 2>&1 && \
+if aws s3 ls "s3://$BUCKET_NAME" > /dev/null 2>&1 && \
    aws dynamodb describe-table --table-name "$TABLE_NAME" > /dev/null 2>&1; then
     echo "✅ All prerequisites met - ready to deploy!"
     echo ""
