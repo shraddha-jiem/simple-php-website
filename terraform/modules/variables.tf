@@ -99,5 +99,5 @@ variable "github_repo" {
 variable "github_branch" {
   description = "GitHub branch to track"
   type        = string
-  default     = "main"
+  default     = "copilot/fix-276ebe75-1be6-43fa-8680-08ad8fce680b"
 }
