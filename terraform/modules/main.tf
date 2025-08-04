@@ -31,16 +31,19 @@ module "iam" {
 module "ec2" {
   source = "./ec2"
 
-  environment           = var.environment
-  project_name         = var.project_name
-  public_subnet_ids    = module.vpc.public_subnet_ids
-  security_group_id    = module.security_groups.ec2_security_group_id
-  instance_profile_name = module.iam.ec2_instance_profile_name
-  instance_type        = var.instance_type
-  min_size            = var.min_size
-  max_size            = var.max_size
-  desired_capacity    = var.desired_capacity
-  key_name            = var.key_name
+  environment             = var.environment
+  project_name           = var.project_name
+  instance_type          = var.instance_type
+  key_name               = var.key_name
+  min_size               = var.min_size
+  max_size               = var.max_size
+  desired_capacity       = var.desired_capacity
+  security_group_id      = module.security_groups.ec2_security_group_id
+  instance_profile_name  = module.iam.instance_profile_name
+  
+  # Add the missing arguments
+  private_subnet_ids     = module.vpc.private_subnet_ids
+  public_subnet_ids      = module.vpc.public_subnet_ids
 }
 
 # ALB Module

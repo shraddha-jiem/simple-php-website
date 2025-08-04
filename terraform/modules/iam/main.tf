@@ -14,6 +14,10 @@ resource "aws_iam_role" "ec2_role" {
       }
     ]
   })
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-ec2-role"
+  }
 }
 
 resource "aws_iam_role_policy" "ec2_policy" {
@@ -27,10 +31,15 @@ resource "aws_iam_role_policy" "ec2_policy" {
         Effect = "Allow"
         Action = [
           "s3:GetObject",
+          "s3:GetObjectVersion",  # Add this permission
           "s3:ListBucket"
         ]
         Resource = [
-          "arn:aws:s3:::aws-codedeploy-*"
+          "arn:aws:s3:::aws-codedeploy-*",
+          "arn:aws:s3:::aws-codedeploy-*/*",
+          # Add permissions for your CodePipeline artifacts bucket
+          "arn:aws:s3:::${var.project_name}-${var.environment}-codepipeline-artifacts-*",
+          "arn:aws:s3:::${var.project_name}-${var.environment}-codepipeline-artifacts-*/*"
         ]
       },
       {
@@ -39,6 +48,17 @@ resource "aws_iam_role_policy" "ec2_policy" {
           "secretsmanager:GetSecretValue"
         ]
         Resource = "*"
+      },
+      # Add CodeDeploy agent permissions
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:DescribeLogStreams"
+        ]
+        Resource = "arn:aws:logs:*:*:*"
       }
     ]
   })
@@ -47,6 +67,10 @@ resource "aws_iam_role_policy" "ec2_policy" {
 resource "aws_iam_instance_profile" "ec2_profile" {
   name = "${var.project_name}-${var.environment}-ec2-profile"
   role = aws_iam_role.ec2_role.name
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-ec2-profile"
+  }
 }
 
 # CodeDeploy Service Role

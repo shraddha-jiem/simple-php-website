@@ -1,6 +1,7 @@
 # S3 Bucket for CodePipeline artifacts
 resource "aws_s3_bucket" "codepipeline_artifacts" {
   bucket = "${var.project_name}-${var.environment}-codepipeline-artifacts-${random_string.bucket_suffix.result}"
+  force_destroy = true  # Add this line to allow deletion of non-empty bucket
 }
 
 resource "aws_s3_bucket_versioning" "codepipeline_artifacts" {
@@ -76,26 +77,25 @@ resource "aws_codedeploy_deployment_group" "main" {
 
   deployment_config_name = "CodeDeployDefault.AllAtOnce"
 
+  # Use both Auto Scaling groups and EC2 tag filters
   autoscaling_groups = [var.autoscaling_group_name]
+
+  # Add EC2 tag filters to identify instances
+  ec2_tag_filter {
+    key   = "Environment"
+    type  = "KEY_AND_VALUE"
+    value = var.environment
+  }
+
+  ec2_tag_filter {
+    key   = "Project"
+    type  = "KEY_AND_VALUE"
+    value = var.project_name
+  }
 
   auto_rollback_configuration {
     enabled = true
     events  = ["DEPLOYMENT_FAILURE"]
-  }
-
-  blue_green_deployment_config {
-    terminate_blue_instances_on_deployment_success {
-      action                         = "TERMINATE"
-      termination_wait_time_in_minutes = 5
-    }
-
-    deployment_ready_option {
-      action_on_timeout = "CONTINUE_DEPLOYMENT"
-    }
-
-    green_fleet_provisioning_option {
-      action = "COPY_AUTO_SCALING_GROUP"
-    }
   }
 
   load_balancer_info {

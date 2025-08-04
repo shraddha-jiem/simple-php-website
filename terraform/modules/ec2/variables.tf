@@ -1,16 +1,29 @@
-variable "environment" {
-  description = "Environment name (dev, stage, prod)"
-  type        = string
+variable "private_subnet_ids" {
+  description = "List of private subnet IDs for the Auto Scaling Group"
+  type        = list(string)
 }
 
+# Make sure you also have these other variables declared:
 variable "project_name" {
   description = "Name of the project"
   type        = string
 }
 
-variable "public_subnet_ids" {
-  description = "List of public subnet IDs"
-  type        = list(string)
+variable "environment" {
+  description = "Environment name"
+  type        = string
+}
+
+variable "instance_type" {
+  description = "EC2 instance type"
+  type        = string
+  default     = "t2.micro"
+}
+
+variable "key_name" {
+  description = "EC2 Key Pair name"
+  type        = string
+  default     = ""
 }
 
 variable "security_group_id" {
@@ -21,12 +34,6 @@ variable "security_group_id" {
 variable "instance_profile_name" {
   description = "IAM instance profile name"
   type        = string
-}
-
-variable "instance_type" {
-  description = "EC2 instance type"
-  type        = string
-  default     = "t2.micro"
 }
 
 variable "min_size" {
@@ -47,8 +54,7 @@ variable "desired_capacity" {
   default     = 2
 }
 
-variable "key_name" {
-  description = "EC2 Key Pair name for SSH access"
-  type        = string
-  default     = ""
+variable "public_subnet_ids" {
+  description = "List of public subnet IDs for the load balancer"
+  type        = list(string)
 }

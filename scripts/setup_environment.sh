@@ -4,7 +4,7 @@
 # This script should be run during deployment to set environment variables
 
 REGION="us-east-1"
-SECRET_NAME="${PROJECT_NAME}-${ENVIRONMENT}-db-password"
+SECRET_NAME="${PROJECT_NAME}-${ENVIRONMENT}-db-password-4"
 
 if command -v aws &> /dev/null; then
     echo "Getting database credentials from Secrets Manager..."

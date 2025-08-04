@@ -14,43 +14,12 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
-# User data script to install Apache, PHP, and CodeDeploy agent
-locals {
-  user_data = base64encode(<<-EOF
-    #!/bin/bash
-    yum update -y
-    yum install -y httpd php php-mysqlnd
-    systemctl start httpd
-    systemctl enable httpd
-    
-    # Install CodeDeploy agent
-    yum install -y ruby wget
-    cd /home/ec2-user
-    wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install
-    chmod +x ./install
-    ./install auto
-    
-    # Configure Apache
-    usermod -a -G apache ec2-user
-    chown -R ec2-user:apache /var/www
-    chmod 2775 /var/www
-    find /var/www -type d -exec chmod 2775 {} \;
-    find /var/www -type f -exec chmod 0664 {} \;
-    
-    # Create a simple info page
-    echo "<?php phpinfo(); ?>" > /var/www/html/info.php
-    
-    systemctl restart httpd
-  EOF
-  )
-}
-
 # Launch Template
 resource "aws_launch_template" "main" {
   name_prefix   = "${var.project_name}-${var.environment}-"
   image_id      = data.aws_ami.amazon_linux.id
   instance_type = var.instance_type
-  key_name      = var.key_name != "" ? var.key_name : null
+  key_name      = var.key_name
 
   vpc_security_group_ids = [var.security_group_id]
 
@@ -58,24 +27,30 @@ resource "aws_launch_template" "main" {
     name = var.instance_profile_name
   }
 
-  user_data = local.user_data
+  user_data = base64encode(templatefile("${path.module}/user_data.sh", {
+    environment = var.environment
+  }))
 
+  # Add proper tags to instances
   tag_specifications {
     resource_type = "instance"
     tags = {
-      Name = "${var.project_name}-${var.environment}-web"
+      Name        = "${var.project_name}-${var.environment}-instance"
+      Environment = var.environment
+      Project     = var.project_name
+      # Add CodeDeploy specific tag
+      CodeDeployApplication = "${var.project_name}-${var.environment}-app"
     }
   }
 
-  lifecycle {
-    create_before_destroy = true
+  tags = {
+    Name = "${var.project_name}-${var.environment}-launch-template"
   }
 }
 
-# Auto Scaling Group
 resource "aws_autoscaling_group" "main" {
   name                = "${var.project_name}-${var.environment}-asg"
-  vpc_zone_identifier = var.public_subnet_ids
+  vpc_zone_identifier = var.private_subnet_ids
   target_group_arns   = [aws_lb_target_group.main.arn]
   health_check_type   = "ELB"
   health_check_grace_period = 300
@@ -89,6 +64,7 @@ resource "aws_autoscaling_group" "main" {
     version = "$Latest"
   }
 
+  # Add tags to the ASG itself
   tag {
     key                 = "Name"
     value               = "${var.project_name}-${var.environment}-asg"
@@ -107,8 +83,11 @@ resource "aws_autoscaling_group" "main" {
     propagate_at_launch = true
   }
 
-  lifecycle {
-    create_before_destroy = true
+  # Add CodeDeploy tag
+  tag {
+    key                 = "CodeDeployApplication"
+    value               = "${var.project_name}-${var.environment}-app"
+    propagate_at_launch = true
   }
 }
 
