@@ -49,6 +49,26 @@ resource "aws_iam_role_policy" "ec2_policy" {
         ]
         Resource = "*"
       },
+      # Add SSM permissions for EC2 instances
+      {
+        Effect = "Allow"
+        Action = [
+          "ssm:GetParameter",
+          "ssm:GetParameters",
+          "ssm:GetParametersByPath"
+        ]
+        Resource = [
+          "arn:aws:ssm:us-east-1:*:parameter/app/*"
+        ]
+      },
+      # Add RDS permissions
+      {
+        Effect = "Allow"
+        Action = [
+          "rds:DescribeDBInstances"
+        ]
+        Resource = "*"
+      },
       # Add CodeDeploy agent permissions
       {
         Effect = "Allow"

@@ -32,6 +32,11 @@ if command -v aws &> /dev/null; then
         DB_USERNAME=$(echo "$SECRET_VALUE" | python3 -c "import sys, json; print(json.load(sys.stdin)['username'])" 2>/dev/null)
         DB_PASSWORD=$(echo "$SECRET_VALUE" | python3 -c "import sys, json; print(json.load(sys.stdin)['password'])" 2>/dev/null)
         
+        # Get RDS endpoint - ADD THIS LINE
+        DB_IDENTIFIER="${PROJECT_NAME}-${ENVIRONMENT}-db"
+        DB_HOST=$(aws rds describe-db-instances --db-instance-identifier "$DB_IDENTIFIER" --region "$REGION" --query 'DBInstances[0].Endpoint.Address' --output text 2>/dev/null)
+        DB_NAME="webapp"  # Your database name
+
         # Create environment file for Apache
         cat > /etc/environment << EOF
 DB_HOST=$DB_HOST
