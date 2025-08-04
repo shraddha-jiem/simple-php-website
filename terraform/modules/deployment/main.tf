@@ -105,6 +105,29 @@ resource "aws_codedeploy_deployment_group" "main" {
   }
 }
 
+# Create SSM parameters for deployment configuration
+resource "aws_ssm_parameter" "project_name" {
+  name  = "/app/config/project_name"
+  type  = "String"
+  value = var.project_name
+
+  tags = {
+    Environment = var.environment
+    Project     = var.project_name
+  }
+}
+
+resource "aws_ssm_parameter" "environment" {
+  name  = "/app/config/environment"
+  type  = "String"
+  value = var.environment
+
+  tags = {
+    Environment = var.environment
+    Project     = var.project_name
+  }
+}
+
 # CodeStar Connection
 resource "aws_codestarconnections_connection" "github" {
   name          = "${var.project_name}-${var.environment}-gh-conn"

@@ -4,6 +4,21 @@
 # This script should be run during deployment to set environment variables
 
 REGION="us-east-1"
+
+echo "Reading configuration from Parameter Store..."
+
+# Get configuration from Parameter Store
+PROJECT_NAME=$(aws ssm get-parameter --name "/app/config/project_name" --region "$REGION" --query 'Parameter.Value' --output text 2>/dev/null)
+ENVIRONMENT=$(aws ssm get-parameter --name "/app/config/environment" --region "$REGION" --query 'Parameter.Value' --output text 2>/dev/null)
+
+if [ -z "$PROJECT_NAME" ] || [ -z "$ENVIRONMENT" ]; then
+    echo "Failed to retrieve configuration from Parameter Store"
+    exit 1
+fi
+
+echo "Retrieved PROJECT_NAME: $PROJECT_NAME"
+echo "Retrieved ENVIRONMENT: $ENVIRONMENT"
+
 SECRET_NAME="${PROJECT_NAME}-${ENVIRONMENT}-db-password-4"
 
 if command -v aws &> /dev/null; then
