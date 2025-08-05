@@ -32,7 +32,7 @@ echo "✅ Prerequisites check passed"
 echo ""
 echo "🔧 Validating Terraform syntax..."
 
-cd terraform/modules
+cd ../terraform/modules
 
 # Initialize without backend for validation
 terraform init -backend=false > /dev/null 2>&1
