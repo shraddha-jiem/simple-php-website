@@ -28,7 +28,7 @@ $db_config = config('database');
 <div style="padding: 20px; margin: 20px 0; border: 1px solid #ddd; border-radius: 5px;">
     <p><strong>Environment:</strong> <?php echo getenv('ENVIRONMENT') ?: 'local'; ?></p>
     <p><strong>PHP Version:</strong> <?php echo PHP_VERSION; ?></p>
-    <p><strong>Server Software:</strong> <?php echo $_SERVER['SERVER_SOFTWARE'] ?? 'Unknown'; ?></p>
+    <p><strong>Server Software:</strong> <?php echo isset($_SERVER['SERVER_SOFTWARE']) ? $_SERVER['SERVER_SOFTWARE'] : 'Unknown'; ?></p>
 </div>
 
 <h3>Infrastructure Features</h3>
