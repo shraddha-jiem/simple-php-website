@@ -8,7 +8,7 @@
 function config($key = '')
 {
     $config = [
-        'name' => 'Simple PHP Website (Dev) - V1.4',
+        'name' => 'Simple PHP Website (Dev) - V1.5',
         'site_url' => '',
         'pretty_uri' => false,
         'nav_menu' => [
