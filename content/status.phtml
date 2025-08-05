@@ -1,0 +1,45 @@
+<h3>Database Status</h3>
+
+<?php
+$db_connected = is_db_connected();
+$db_config = config('database');
+?>
+
+<div style="padding: 20px; margin: 20px 0; border: 1px solid #ddd; border-radius: 5px;">
+    <p><strong>Database Connection:</strong> 
+        <?php if ($db_connected): ?>
+            <span style="color: green;">✓ Connected</span>
+        <?php else: ?>
+            <span style="color: red;">✗ Not Connected</span>
+        <?php endif; ?>
+    </p>
+    
+    <p><strong>Database Host:</strong> <?php echo htmlspecialchars($db_config['host']); ?></p>
+    <p><strong>Database Name:</strong> <?php echo htmlspecialchars($db_config['name']); ?></p>
+    <p><strong>Database Port:</strong> <?php echo htmlspecialchars($db_config['port']); ?></p>
+    
+    <?php if (!$db_connected): ?>
+        <p><em>Note: Database connection will be available after deployment to AWS with RDS.</em></p>
+    <?php endif; ?>
+</div>
+
+<h3>Environment Information</h3>
+
+<div style="padding: 20px; margin: 20px 0; border: 1px solid #ddd; border-radius: 5px;">
+    <p><strong>Environment:</strong> <?php echo getenv('ENVIRONMENT') ?: 'local'; ?></p>
+    <p><strong>PHP Version:</strong> <?php echo PHP_VERSION; ?></p>
+    <p><strong>Server Software:</strong> <?php echo $_SERVER['SERVER_SOFTWARE'] ?? 'Unknown'; ?></p>
+</div>
+
+<h3>Infrastructure Features</h3>
+
+<ul>
+    <li>VPC with public and private subnets</li>
+    <li>Auto Scaling Group with EC2 instances</li>
+    <li>Application Load Balancer for high availability</li>
+    <li>RDS MySQL database in private subnets</li>
+    <li>CodePipeline for automated deployments</li>
+    <li>Security groups for network isolation</li>
+</ul>
+
+<p>This application is ready for deployment to AWS using Terraform and Terragrunt for infrastructure management.</p>
