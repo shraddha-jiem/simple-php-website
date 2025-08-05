@@ -143,6 +143,12 @@ resource "aws_codepipeline" "main" {
   name     = "${var.project_name}-${var.environment}-pipeline"
   role_arn = var.codepipeline_role_arn
 
+  # Add pipeline type V2
+  pipeline_type = "V2"
+
+  # V2 requires explicit execution mode
+  execution_mode = "QUEUED"  # or "PARALLEL"
+
   artifact_store {
     location = aws_s3_bucket.codepipeline_artifacts.bucket
     type     = "S3"
