@@ -8,7 +8,7 @@
 function config($key = '')
 {
     $config = [
-        'name' => 'Simple PHP Website with Terraform',
+        'name' => 'Simple PHP Website (with Terraform on branch push trigger)',
         'site_url' => '',
         'pretty_uri' => false,
         'nav_menu' => [
