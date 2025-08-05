@@ -209,3 +209,79 @@ resource "aws_codepipeline" "main" {
     Name = "${var.project_name}-${var.environment}-pipeline"
   }
 }
+
+# CloudWatch Event Rule for GitHub push events (only for dev environment)
+resource "aws_cloudwatch_event_rule" "github_push" {
+  count = var.environment == "dev" ? 1 : 0
+  
+  name        = "${var.project_name}-${var.environment}-github-push"
+  description = "Trigger CodePipeline on GitHub push to ${var.github_branch} branch"
+
+  # Simplified event pattern for GitHub repository state changes
+  event_pattern = jsonencode({
+    source      = ["aws.codeconnections"]
+    detail-type = ["CodeConnections Repository State Change"]
+    detail = {
+      repository-name = [var.github_repo]
+      branch-name     = [var.github_branch]
+    }
+  })
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-github-push-rule"
+  }
+}
+
+# CloudWatch Event Target
+resource "aws_cloudwatch_event_target" "codepipeline" {
+  count     = var.environment == "dev" ? 1 : 0
+  rule      = aws_cloudwatch_event_rule.github_push[0].name
+  target_id = "TriggerCodePipeline"
+  arn       = aws_codepipeline.main.arn
+
+  role_arn = aws_iam_role.eventbridge_role[0].arn
+}
+
+# IAM Role for EventBridge
+resource "aws_iam_role" "eventbridge_role" {
+  count = var.environment == "dev" ? 1 : 0
+  name  = "${var.project_name}-${var.environment}-eventbridge-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "events.amazonaws.com"
+        }
+      }
+    ]
+  })
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-eventbridge-role"
+  }
+}
+
+# IAM Policy for EventBridge role
+resource "aws_iam_role_policy" "eventbridge_policy" {
+  count = var.environment == "dev" ? 1 : 0
+  name  = "${var.project_name}-${var.environment}-eventbridge-policy"
+  role  = aws_iam_role.eventbridge_role[0].id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "codepipeline:StartPipelineExecution"
+        ]
+        Resource = aws_codepipeline.main.arn
+      }
+    ]
+  })
+}
+
