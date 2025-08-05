@@ -154,6 +154,24 @@ resource "aws_codepipeline" "main" {
     type     = "S3"
   }
 
+  # V2 Pipeline trigger configuration
+  dynamic "trigger" {
+    for_each = var.environment == "dev" ? [1] : []
+    content {
+      provider_type = "CodeStarSourceConnection"
+      
+      git_configuration {
+        source_action_name = "Source"
+        
+        push {
+          branches {
+            includes = [var.github_branch]
+          }
+        }
+      }
+    }
+  }
+
   stage {
     name = "Source"
 
@@ -169,7 +187,6 @@ resource "aws_codepipeline" "main" {
         ConnectionArn           = aws_codestarconnections_connection.github.arn
         FullRepositoryId        = "${var.github_owner}/${var.github_repo}"
         BranchName              = var.github_branch
-        DetectChanges           = var.environment == "dev" ? "true" : "false"
         OutputArtifactFormat    = "CODE_ZIP"
       }
     }
