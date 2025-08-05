@@ -19,7 +19,7 @@ fi
 echo "Retrieved PROJECT_NAME: $PROJECT_NAME"
 echo "Retrieved ENVIRONMENT: $ENVIRONMENT"
 
-SECRET_NAME="${PROJECT_NAME}-${ENVIRONMENT}-db-password-4"
+SECRET_NAME="${PROJECT_NAME}-${ENVIRONMENT}-db-password-5"
 
 if command -v aws &> /dev/null; then
     echo "Getting database credentials from Secrets Manager..."
