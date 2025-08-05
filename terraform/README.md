@@ -39,7 +39,6 @@ terraform/
 1. **AWS CLI** configured with appropriate permissions
 2. **Terraform** (>= 1.0)
 3. **Terragrunt** (>= 0.45)
-4. **GitHub Personal Access Token** stored in AWS Secrets Manager
 
 ### AWS Permissions Required
 
@@ -50,17 +49,8 @@ Your AWS user/role needs permissions for:
 - DynamoDB for state locking
 - CodePipeline, CodeBuild, CodeDeploy
 - Secrets Manager
-
-### GitHub Token Setup
-
-Store your GitHub personal access token in AWS Secrets Manager:
-
-```bash
-aws secretsmanager create-secret \
-  --name "github-token" \
-  --description "GitHub personal access token for CodePipeline" \
-  --secret-string '{"token":"your-github-token-here"}'
-```
+- CodeStarConnection
+- SSM
 
 ## Deployment Instructions
 
@@ -159,9 +149,8 @@ terragrunt destroy
 ### Common Issues
 
 1. **State Lock**: If Terragrunt gets stuck, check DynamoDB for locks
-2. **GitHub Token**: Ensure the GitHub token is stored correctly in Secrets Manager
-3. **Permissions**: Verify AWS IAM permissions for all required services
-4. **Region**: Ensure you're deploying to the correct AWS region
+2. **Permissions**: Verify AWS IAM permissions for all required services
+3. **Region**: Ensure you're deploying to the correct AWS region
 
 ### Logs
 

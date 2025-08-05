@@ -7,32 +7,20 @@ This guide helps you quickly deploy the Simple PHP Website infrastructure to AWS
 1. AWS CLI configured with appropriate permissions
 2. Terraform installed (>= 1.0)
 3. Terragrunt installed (>= 0.45)
-4. GitHub Personal Access Token
 
 ## 1. Set up AWS Account
 
 Ensure your AWS account has the following services available:
-- EC2, VPC, RDS, ALB
-- IAM, S3, DynamoDB  
+- EC2, VPC, RDS, ALB, Auto Scaling
+- IAM roles and policies
+- S3 buckets for Terraform state
+- DynamoDB for state locking
 - CodePipeline, CodeBuild, CodeDeploy
 - Secrets Manager
+- CodeStarConnection
+- SSM
 
-## 2. Create GitHub Token
-
-1. Go to GitHub → Settings → Developer settings → Personal access tokens
-2. Create a new token with these permissions:
-   - `repo` (full repository access)
-   - `admin:repo_hook` (read and write repository hooks)
-3. Store the token in AWS Secrets Manager:
-
-```bash
-aws secretsmanager create-secret \
-  --name "github-token" \
-  --description "GitHub personal access token for CodePipeline" \
-  --secret-string '{"token":"YOUR_GITHUB_TOKEN_HERE"}'
-```
-
-## 3. Create S3 Bucket and DynamoDB Table
+## 2. Create S3 Bucket and DynamoDB Table
 
 Replace `123456789012` with your actual AWS account ID:
 
@@ -48,7 +36,7 @@ aws dynamodb create-table \
   --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
 ```
 
-## 4. Deploy Infrastructure
+## 3. Deploy Infrastructure
 
 ### Deploy Dev Environment
 
