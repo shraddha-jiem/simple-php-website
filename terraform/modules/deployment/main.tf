@@ -222,8 +222,10 @@ resource "aws_cloudwatch_event_rule" "github_push" {
     source      = ["aws.codeconnections"]
     detail-type = ["CodeConnections Repository State Change"]
     detail = {
-      repository-name = [var.github_repo]
-      branch-name     = [var.github_branch]
+      connectionArn = [aws_codestarconnections_connection.github.arn]
+      repositoryName = ["${var.github_owner}/${var.github_repo}"]
+      referenceType = ["branch"]
+      referenceName = [var.github_branch]
     }
   })
 
