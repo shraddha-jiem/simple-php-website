@@ -33,7 +33,7 @@ function nav_menu($sep = ' | ')
     $nav_items = config('nav_menu');
     
     foreach ($nav_items as $uri => $name) {
-        $query_string = str_replace('page=', '', $_SERVER['QUERY_STRING'] ?? '');
+        $query_string = str_replace('page=', '', isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '');
         $class = $query_string == $uri ? ' active' : '';
         $url = config('site_url') . '/' . (config('pretty_uri') || $uri == '' ? '' : '?page=') . $uri;
         
@@ -70,7 +70,8 @@ function page_content()
         $path = getcwd() . '/' . config('content_path') . '/404.phtml';
     }
 
-    echo file_get_contents($path);
+    // Use include to process PHP code in content files
+    include $path;
 }
 
 /**
@@ -79,4 +80,33 @@ function page_content()
 function init()
 {
     require config('template_path') . '/template.php';
+}
+
+/**
+ * Get database connection.
+ */
+function get_db_connection()
+{
+    $db_config = config('database');
+    
+    try {
+        $dsn = "mysql:host={$db_config['host']};port={$db_config['port']};dbname={$db_config['name']};charset=utf8mb4";
+        $pdo = new PDO($dsn, $db_config['username'], $db_config['password'], [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        ]);
+        return $pdo;
+    } catch (PDOException $e) {
+        error_log("Database connection failed: " . $e->getMessage());
+        return null;
+    }
+}
+
+/**
+ * Check if database is connected.
+ */
+function is_db_connected()
+{
+    $pdo = get_db_connection();
+    return $pdo !== null;
 }

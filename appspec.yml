@@ -5,27 +5,26 @@ files:
     destination: /var/www/html
     overwrite: yes
 permissions:
+  # Simple approach - set permissions for everything
   - object: /var/www/html
-    pattern: "**"
     owner: apache
-    group: ec2-user
-    mode: 664
-    type:
-      - file
-  - object: /var/www/html
-    pattern: "**"
-    owner: apache
-    group: ec2-user
-    mode: 775
+    group: apache
+    mode: 755
     type:
       - directory
-# hooks:
-#   BeforeInstall:
-#     - location: scripts/stop_apache.sh
-#       timeout: 300
-#       runas: root
-#   ApplicationStart:
-#     - location: scripts/start_apache.sh
-#       timeout: 300
-#       runas: root
+  - object: /var/www/html
+    owner: apache
+    group: apache  
+    mode: 644
+    type:
+      - file
+hooks:
+  BeforeInstall:
+    - location: scripts/setup_environment.sh
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: scripts/start_apache.sh
+      timeout: 300
+      runas: root
       

@@ -1,2 +1,18 @@
 /.idea
 .php_cs.cache
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+terraform.tfvars
+terraform.tfvars.json
+*.tfplan
+*.tfplan.*
+
+# Terragrunt
+.terragrunt-cache/
+
+# Environment variables
+.env
