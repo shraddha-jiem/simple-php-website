@@ -217,15 +217,14 @@ resource "aws_cloudwatch_event_rule" "github_push" {
   name        = "${var.project_name}-${var.environment}-github-push"
   description = "Trigger CodePipeline on GitHub push to ${var.github_branch} branch"
 
-  # Simplified event pattern for GitHub repository state changes
+  # Use CodePipeline state change events instead
   event_pattern = jsonencode({
-    source      = ["aws.codeconnections"]
-    detail-type = ["CodeConnections Repository State Change"]
+    source      = ["aws.codepipeline"]
+    detail-type = ["CodePipeline Source Action State Change"]
     detail = {
-      connectionArn = [aws_codestarconnections_connection.github.arn]
-      repositoryName = ["${var.github_owner}/${var.github_repo}"]
-      referenceType = ["branch"]
-      referenceName = [var.github_branch]
+      pipeline = [aws_codepipeline.main.name]
+      action   = ["Source"]
+      state    = ["STARTED"]
     }
   })
 
