@@ -23,11 +23,11 @@ function config($key = '')
         'version' => 'v3.1',
         // Database configuration (will be set via environment variables)
         'database' => [
-            'host' => getenv('DB_HOST') ?: 'localhost',
-            'name' => getenv('DB_NAME') ?: 'simpleapp',
-            'username' => getenv('DB_USERNAME') ?: 'admin',
-            'password' => getenv('DB_PASSWORD') ?: '',
-            'port' => getenv('DB_PORT') ?: '3306',
+            'host' => getenv('DB_HOST') ? getenv('DB_HOST') : 'localhost',
+            'name' => getenv('DB_NAME') ? getenv('DB_NAME') : 'simpleapp',
+            'username' => getenv('DB_USERNAME') ? getenv('DB_USERNAME') : 'admin',
+            'password' => getenv('DB_PASSWORD') ? getenv('DB_PASSWORD') : '',
+            'port' => getenv('DB_PORT') ? getenv('DB_PORT') : '3306',
         ],
     ];
 

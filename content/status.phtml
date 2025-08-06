@@ -1,16 +1,6 @@
 <h3>Database Status</h3>
 
 <?php
-// Check PHP settings
-echo "variables_order: " . ini_get('variables_order');
-?>
-
-<h4>All Environment Variables</h4>
-<pre><?php print_r($_ENV); ?></pre>
-<pre><?php print_r($_SERVER); ?></pre>
-<pre><?php print_r(getenv()); ?></pre>
-
-<?php
 $db_connected = is_db_connected();
 $db_config = config('database');
 ?>
@@ -36,7 +26,7 @@ $db_config = config('database');
 <h3>Environment Information</h3>
 
 <div style="padding: 20px; margin: 20px 0; border: 1px solid #ddd; border-radius: 5px;">
-    <p><strong>Environment:</strong> <?php echo getenv('ENVIRONMENT') ?: 'local'; ?></p>
+    <p><strong>Environment:</strong> <?php echo getenv('ENVIRONMENT') ? getenv('ENVIRONMENT') : 'local'; ?></p>
     <p><strong>PHP Version:</strong> <?php echo PHP_VERSION; ?></p>
     <p><strong>Server Software:</strong> <?php echo isset($_SERVER['SERVER_SOFTWARE']) ? $_SERVER['SERVER_SOFTWARE'] : 'Unknown'; ?></p>
 </div>
