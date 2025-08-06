@@ -36,6 +36,25 @@ aws dynamodb create-table \
   --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
 ```
 
+## 2.1 Configure AWS Systems Manager Session Manager
+
+To enable secure, no-SSH access to your EC2 instances:
+
+1. Ensure your AWS CLI is set up with the Session Manager plugin:
+
+```bash
+# For macOS
+brew install --cask session-manager-plugin
+
+# For other operating systems, see AWS documentation
+```
+
+2. Verify Session Manager plugin installation:
+
+```bash
+session-manager-plugin --version
+```
+
 ## 3. Deploy Infrastructure
 
 ### Deploy Dev Environment
@@ -48,6 +67,34 @@ terragrunt apply
 ```
 
 ### Deploy Stage Environment
+
+## 4. Connecting to EC2 Instances
+
+You can connect to the EC2 instances using AWS Systems Manager Session Manager:
+
+```bash
+# List available instances
+aws ec2 describe-instances --filters "Name=tag:Environment,Values=dev" --query "Reservations[*].Instances[*].[InstanceId,PrivateIpAddress,Tags[?Key=='Name'].Value|[0]]" --output table
+
+# Connect to an instance using Session Manager
+aws ssm start-session --target i-1234567890abcdef0
+```
+
+## 5. Troubleshooting SSM Connectivity Issues
+
+If you encounter "SSM Agent is not online" errors, try these steps:
+
+1. Check SSM Agent status for your instance:
+```bash
+# Replace i-1234567890abcdef0 with your instance ID
+./scripts/validate_ssm_agent.sh i-1234567890abcdef0
+```
+
+2. Common issues and solutions:
+   - **Missing IAM permissions**: Ensure the EC2 instance role has ssmmessages:* permissions
+   - **SSM Agent not running**: The agent needs to be installed and running
+   - **Network connectivity**: EC2 instances need outbound internet access (via NAT Gateway)
+   - **VPC endpoints**: Consider adding VPC endpoints for SSM if using private subnets
 
 ```bash
 cd terraform/environments/stage

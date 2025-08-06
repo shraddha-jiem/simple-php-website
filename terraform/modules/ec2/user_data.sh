@@ -1,5 +1,12 @@
 #!/bin/bash
 yum update -y
+
+# Ensure SSM agent is installed and running
+yum install -y amazon-ssm-agent
+systemctl enable amazon-ssm-agent
+systemctl start amazon-ssm-agent
+
+# Install web server components
 yum install -y httpd php php-mysqlnd
 systemctl start httpd
 systemctl enable httpd

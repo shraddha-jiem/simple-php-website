@@ -61,6 +61,18 @@ resource "aws_iam_role_policy" "ec2_policy" {
           "arn:aws:ssm:us-east-1:*:parameter/app/*"
         ]
       },
+      # Add SSM Session Manager permissions
+      {
+        Effect = "Allow"
+        Action = [
+          "ssm:UpdateInstanceInformation",
+          "ssmmessages:CreateControlChannel",
+          "ssmmessages:CreateDataChannel",
+          "ssmmessages:OpenControlChannel",
+          "ssmmessages:OpenDataChannel"
+        ]
+        Resource = "*"
+      },
       # Add RDS permissions
       {
         Effect = "Allow"

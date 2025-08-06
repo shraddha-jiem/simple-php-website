@@ -47,6 +47,28 @@ fi
 
 cd ../../
 
+# Check SSM Connectivity capability
+echo ""
+echo "🛡️ Validating SSM configuration..."
+
+pwd
+
+# Check if IAM policy has necessary SSM permissions
+if grep -q "ssmmessages:CreateControlChannel" ../terraform/modules/iam/main.tf; then
+    echo "✅ SSM Session Manager permissions present in IAM policy"
+else
+    echo "❌ Missing SSM Session Manager permissions in IAM policy"
+    echo "   Add ssmmessages:* permissions to the EC2 instance role"
+fi
+
+# Check SSM agent installation in user_data script
+if grep -q "amazon-ssm-agent" ../terraform/modules/ec2/user_data.sh; then
+    echo "✅ SSM Agent installation found in user_data script"
+else
+    echo "⚠️  No explicit SSM Agent installation in user_data script"
+    echo "   Consider adding SSM Agent installation to ensure it's enabled"
+fi
+
 # Check AWS credentials
 echo ""
 echo "🔑 Checking AWS credentials..."
