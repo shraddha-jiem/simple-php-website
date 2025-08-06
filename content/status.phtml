@@ -1,6 +1,16 @@
 <h3>Database Status</h3>
 
 <?php
+// Check PHP settings
+echo "variables_order: " . ini_get('variables_order');
+?>
+
+<h4>All Environment Variables</h4>
+<pre><?php print_r($_ENV); ?></pre>
+<pre><?php print_r($_SERVER); ?></pre>
+<pre><?php print_r(getenv()); ?></pre>
+
+<?php
 $db_connected = is_db_connected();
 $db_config = config('database');
 ?>
