@@ -8,9 +8,9 @@ resource "random_password" "db_password" {
 
 # Store password in AWS Secrets Manager
 resource "aws_secretsmanager_secret" "db_password" {
-  name                    = "${var.project_name}-${var.environment}-db-password-5"
+  name                    = "${var.project_name}-${var.environment}-db-password-rds"
   description             = "Database password for ${var.project_name} ${var.environment}"
-  recovery_window_in_days = 7
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "db_password" {
