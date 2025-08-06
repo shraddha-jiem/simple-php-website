@@ -171,8 +171,11 @@ resource "aws_codepipeline" "main" {
         Repo                 = var.github_repo
         Branch               = var.github_branch
         OAuthToken           = jsondecode(data.aws_secretsmanager_secret_version.github_token.secret_string)["token"]
-        PollForSourceChanges = "false"  # Use webhooks instead of polling
+        PollForSourceChanges = var.github_branch == "dev" ? "false" : "true"  # Use webhooks for dev, polling for stage
       }
+
+        # For dev: Webhook created explicitly below with aws_codepipeline_webhook resource
+        # For stage: PollForSourceChanges = true enables manual triggering
     }
   }
 
@@ -214,6 +217,26 @@ resource "aws_codepipeline" "main" {
 
   tags = {
     Name = "${var.project_name}-${var.environment}-pipeline"
+  }
+}
+
+# Explicitly create webhook for GitHub integration
+resource "aws_codepipeline_webhook" "github_webhook" {
+  # Only create webhook for dev environment (auto-trigger)
+  count = var.github_branch == "dev" ? 1 : 0
+  
+  name            = "${var.project_name}-${var.environment}-webhook"
+  authentication  = "GITHUB_HMAC"
+  target_action   = "Source"
+  target_pipeline = aws_codepipeline.main.name
+
+  authentication_configuration {
+    secret_token = jsondecode(data.aws_secretsmanager_secret_version.github_token.secret_string)["token"]
+  }
+
+  filter {
+    json_path    = "$.ref"
+    match_equals = "refs/heads/${var.github_branch}"
   }
 }
 
