@@ -25,6 +25,11 @@ find /var/www -type f -exec chmod 0664 {} \;
 # Create a simple info page
 echo "<?php phpinfo(); ?>" > /var/www/html/info.php
 
+# Set PHP timezone
+echo "date.timezone = Asia/Kolkata" >> /etc/php.ini
+# Alternative: Create a custom php.ini file in the conf.d directory
+echo "date.timezone = Asia/Kolkata" > /etc/php.d/timezone.ini
+
 systemctl restart httpd
 
 # Environment: ${environment}
