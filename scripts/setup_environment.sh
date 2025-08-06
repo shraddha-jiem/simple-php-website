@@ -37,14 +37,22 @@ if command -v aws &> /dev/null; then
         DB_HOST=$(aws rds describe-db-instances --db-instance-identifier "$DB_IDENTIFIER" --region "$REGION" --query 'DBInstances[0].Endpoint.Address' --output text 2>/dev/null)
         DB_NAME="webapp"  # Your database name
 
-        # Create environment file for Apache
-        cat > /etc/environment << EOF
-DB_HOST=$DB_HOST
-DB_NAME=$DB_NAME
-DB_USERNAME=$DB_USERNAME
-DB_PASSWORD=$DB_PASSWORD
-DB_PORT=3306
+        # Create environment file for Apache in a location we can write to
+        mkdir -p /var/www/env
+        cat > /var/www/env/db_config.sh << EOF
+export DB_HOST="$DB_HOST"
+export DB_NAME="$DB_NAME"
+export DB_USERNAME="$DB_USERNAME"
+export DB_PASSWORD="$DB_PASSWORD"
+export DB_PORT="3306"
 EOF
+        chmod 644 /var/www/env/db_config.sh
+        chown apache:apache /var/www/env/db_config.sh
+
+        # Set timezone to prevent PHP warnings (Asia timezone)
+        mkdir -p /etc/php.d
+        echo 'date.timezone = "Asia/Kolkata"' > /etc/php.d/timezone.ini
+        chmod 644 /etc/php.d/timezone.ini
         
         # Set environment variables for current session
         export DB_HOST="$DB_HOST"
