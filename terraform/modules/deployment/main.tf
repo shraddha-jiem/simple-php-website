@@ -1,3 +1,12 @@
+# Add these data sources to retrieve the GitHub token
+data "aws_secretsmanager_secret" "github_token" {
+  name = "pipeline-github-token"  # Replace with your actual secret name
+}
+
+data "aws_secretsmanager_secret_version" "github_token" {
+  secret_id = data.aws_secretsmanager_secret.github_token.id
+}
+
 # S3 Bucket for CodePipeline artifacts
 resource "aws_s3_bucket" "codepipeline_artifacts" {
   bucket = "${var.project_name}-${var.environment}-codepipeline-artifacts-${random_string.bucket_suffix.result}"
@@ -154,40 +163,24 @@ resource "aws_codepipeline" "main" {
     type     = "S3"
   }
 
-  # V2 Pipeline trigger configuration
-  dynamic "trigger" {
-    for_each = var.environment == "dev" ? [1] : []
-    content {
-      provider_type = "CodeStarSourceConnection"
-      
-      git_configuration {
-        source_action_name = "Source"
-        
-        push {
-          branches {
-            includes = [var.github_branch]
-          }
-        }
-      }
-    }
-  }
-
   stage {
     name = "Source"
 
     action {
       name             = "Source"
       category         = "Source"
-      owner            = "AWS"
-      provider         = "CodeStarSourceConnection"
+      owner            = "ThirdParty"  # Instead of "AWS"
+      provider         = "GitHub"      # Instead of "CodeStarSourceConnection"
       version          = "1"
       output_artifacts = ["source_output"]
 
       configuration = {
-        ConnectionArn           = aws_codestarconnections_connection.github.arn
-        FullRepositoryId        = "${var.github_owner}/${var.github_repo}"
-        BranchName              = var.github_branch
-        OutputArtifactFormat    = "CODE_ZIP"
+        # Use these settings instead of ConnectionArn
+        Owner                = var.github_owner
+        Repo                 = var.github_repo
+        Branch               = var.github_branch
+        OAuthToken           = jsondecode(data.aws_secretsmanager_secret_version.github_token.secret_string)["token"]
+        PollForSourceChanges = "false"  # Use webhooks instead of polling
       }
     }
   }
@@ -233,80 +226,4 @@ resource "aws_codepipeline" "main" {
   }
 }
 
-# CloudWatch Event Rule for GitHub push events (only for dev environment)
-resource "aws_cloudwatch_event_rule" "github_push" {
-  count = var.environment == "dev" ? 1 : 0
-  
-  name        = "${var.project_name}-${var.environment}-github-push"
-  description = "Trigger CodePipeline on GitHub push to ${var.github_branch} branch"
-
-  # Use CodePipeline state change events instead
-  event_pattern = jsonencode({
-    source      = ["aws.codestar-connections"],
-    detail-type = ["CodeStar Connections Repository State Change"],
-    detail = {
-      ProviderType   = ["GitHub"],
-      FullRepositoryName = ["${var.github_owner}/${var.github_repo}"],
-      ReferenceType  = ["branch"],
-      ReferenceName  = [var.github_branch]
-    }
-  })
-
-  tags = {
-    Name = "${var.project_name}-${var.environment}-github-push-rule"
-  }
-}
-
-# CloudWatch Event Target
-resource "aws_cloudwatch_event_target" "codepipeline" {
-  count     = var.environment == "dev" ? 1 : 0
-  rule      = aws_cloudwatch_event_rule.github_push[0].name
-  target_id = "TriggerCodePipeline"
-  arn       = aws_codepipeline.main.arn
-
-  role_arn = aws_iam_role.eventbridge_role[0].arn
-}
-
-# IAM Role for EventBridge
-resource "aws_iam_role" "eventbridge_role" {
-  count = var.environment == "dev" ? 1 : 0
-  name  = "${var.project_name}-${var.environment}-eventbridge-role"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Principal = {
-          Service = "events.amazonaws.com"
-        }
-      }
-    ]
-  })
-
-  tags = {
-    Name = "${var.project_name}-${var.environment}-eventbridge-role"
-  }
-}
-
-# IAM Policy for EventBridge role
-resource "aws_iam_role_policy" "eventbridge_policy" {
-  count = var.environment == "dev" ? 1 : 0
-  name  = "${var.project_name}-${var.environment}-eventbridge-policy"
-  role  = aws_iam_role.eventbridge_role[0].id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Action = [
-          "codepipeline:StartPipelineExecution"
-        ]
-        Resource = aws_codepipeline.main.arn
-      }
-    ]
-  })
-}
 
