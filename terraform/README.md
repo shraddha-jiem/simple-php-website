@@ -49,7 +49,6 @@ Your AWS user/role needs permissions for:
 - DynamoDB for state locking
 - CodePipeline, CodeBuild, CodeDeploy
 - Secrets Manager
-- CodeStarConnection
 - SSM
 
 ## Deployment Instructions

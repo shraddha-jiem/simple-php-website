@@ -137,15 +137,6 @@ resource "aws_ssm_parameter" "environment" {
   }
 }
 
-# CodeStar Connection
-resource "aws_codestarconnections_connection" "github" {
-  name          = "${var.project_name}-${var.environment}-gh-conn"
-  provider_type = "GitHub"
-  
-  tags = {
-    Name = "${var.project_name}-${var.environment}-github-connection"
-  }
-}
 
 # CodePipeline
 resource "aws_codepipeline" "main" {
