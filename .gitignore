@@ -1,6 +1,39 @@
 /.idea
 .php_cs.cache
 
+# Composer
+vendor/
+composer.lock
+
+# Testing - Codeception
+tests/_output/
+tests/_support/_generated/
+.server.pid
+
+# IDE and Editor files
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+error.log
+access.log
+
+# Temporary files
+*.tmp
+*.temp
+
 # Terraform
 *.tfstate
 *.tfstate.*
@@ -15,4 +48,4 @@ terraform.tfvars.json
 .terragrunt-cache/
 
 # Environment variables
-.env
+.env*
