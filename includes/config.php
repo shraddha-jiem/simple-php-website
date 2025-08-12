@@ -19,6 +19,7 @@ function config($key = '')
             'status' => 'Status',
             'check' => 'Check',
             'newpage' => 'Newpage',
+            'final' => 'Final',
         ],
         'template_path' => 'template',
         'content_path' => 'content',

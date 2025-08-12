@@ -110,6 +110,20 @@ final class WebsiteNavigationCest
 
 
     /**
+     * Test: Navigate to Final page
+     */
+    public function navigateToFinalPage(AcceptanceTester $I): void
+    {
+        $I->amOnPage('/');
+        $I->click('Final');
+        $I->seeCurrentUrlMatches('/\?page=final/');
+        $I->seeInTitle('Final | Simple PHP Website (Master)');
+        $I->see('Final', 'h2');
+    }
+
+
+
+    /**
      * Test: Access Status page with system information
      * 
      * Scenario: Access Status page with system information
