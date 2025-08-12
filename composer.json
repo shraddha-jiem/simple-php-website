@@ -2,6 +2,7 @@
     "name": "simple-php-website/testing",
     "description": "Simple PHP Website with Codeception Testing",
     "type": "project",
+    "license": "MIT",
     "require": {
         "php": ">=7.4"
     },
