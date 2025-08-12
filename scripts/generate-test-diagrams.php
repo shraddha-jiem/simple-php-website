@@ -9,21 +9,28 @@ class TestDiagramGenerator
     private string $testDir;
     private string $outputDir;
     private array $diagrams = [];
+    private array $gitChanges = [];
+    private int $commitsToCheck;
 
-    public function __construct(string $testDir = 'tests/Acceptance', string $outputDir = 'docs/diagrams')
+    public function __construct(string $testDir = 'tests/Acceptance', string $outputDir = 'docs/diagrams', int $commitsToCheck = 5)
     {
         $this->testDir = $testDir;
         $this->outputDir = $outputDir;
+        $this->commitsToCheck = $commitsToCheck;
         
         // Ensure output directory exists
         if (!is_dir($this->outputDir)) {
             mkdir($this->outputDir, 0755, true);
         }
+        
+        // Analyze Git changes
+        $this->analyzeGitChanges();
     }
 
     public function generateAll(): void
     {
         echo "🔍 Analyzing test files in {$this->testDir}/\n";
+        echo "📊 Checking last {$this->commitsToCheck} commits for changes\n";
         
         $testFiles = glob($this->testDir . '/*Cest.php');
         
@@ -32,17 +39,83 @@ class TestDiagramGenerator
         }
         
         $this->generateOverviewDiagram();
+        $this->generateChangelogDiagram();
         $this->generateReadme();
         
         echo "✅ Generated " . count($this->diagrams) . " diagrams in {$this->outputDir}/\n";
+        if (!empty($this->gitChanges['files'])) {
+            echo "🔄 Highlighted changes from last {$this->commitsToCheck} commits\n";
+        }
+    }
+
+    private function analyzeGitChanges(): void
+    {
+        // Check if we're in a Git repository
+        if (!is_dir('.git')) {
+            echo "⚠️  Not in a Git repository, skipping change analysis\n";
+            return;
+        }
+
+        try {
+            // Get changed files in recent commits
+            $changedFiles = shell_exec("git diff --name-only HEAD~{$this->commitsToCheck}..HEAD");
+            $changedFiles = $changedFiles ? array_filter(explode("\n", trim($changedFiles))) : [];
+            
+            // Get commit information
+            $commitInfo = shell_exec("git log --oneline -n {$this->commitsToCheck}");
+            $commits = $commitInfo ? array_filter(explode("\n", trim($commitInfo))) : [];
+            
+            // Get detailed changes for test files
+            $testFileChanges = [];
+            foreach ($changedFiles as $file) {
+                if (strpos($file, 'tests/') === 0 && strpos($file, 'Cest.php') !== false) {
+                    $changes = shell_exec("git diff HEAD~{$this->commitsToCheck}..HEAD --unified=0 '$file'");
+                    $testFileChanges[$file] = $this->parseGitDiff($changes);
+                }
+            }
+            
+            $this->gitChanges = [
+                'files' => $changedFiles,
+                'commits' => $commits,
+                'testChanges' => $testFileChanges,
+                'timestamp' => date('Y-m-d H:i:s')
+            ];
+            
+        } catch (Exception $e) {
+            echo "⚠️  Error analyzing Git changes: {$e->getMessage()}\n";
+            $this->gitChanges = ['files' => [], 'commits' => [], 'testChanges' => []];
+        }
+    }
+
+    private function parseGitDiff(string $diff): array
+    {
+        $changes = ['added' => [], 'modified' => [], 'removed' => []];
+        
+        if (empty($diff)) return $changes;
+        
+        $lines = explode("\n", $diff);
+        foreach ($lines as $line) {
+            if (strpos($line, '+') === 0 && strpos($line, '+++') !== 0) {
+                $changes['added'][] = trim(substr($line, 1));
+            } elseif (strpos($line, '-') === 0 && strpos($line, '---') !== 0) {
+                $changes['removed'][] = trim(substr($line, 1));
+            }
+        }
+        
+        return $changes;
     }
 
     private function analyzeTestFile(string $filePath): void
     {
         $content = file_get_contents($filePath);
         $className = basename($filePath, '.php');
+        $relativePath = str_replace(getcwd() . '/', '', $filePath);
         
         echo "📝 Processing {$className}...\n";
+        
+        // Check if this file was changed in recent commits
+        $isChanged = in_array($relativePath, $this->gitChanges['files'] ?? []);
+        $fileChanges = $this->gitChanges['testChanges'][$relativePath] ?? null;
         
         // Extract test methods
         preg_match_all('/public function (\w+)\(.*?\): void\s*\{(.*?)\}/s', $content, $matches);
@@ -53,13 +126,43 @@ class TestDiagramGenerator
             $methodBody = $matches[2][$i];
             
             if (strpos($methodName, 'test') === 0 || !in_array($methodName, ['_before', '_after'])) {
-                $testMethods[$methodName] = $this->analyzeTestMethod($methodBody);
+                $steps = $this->analyzeTestMethod($methodBody);
+                $isMethodChanged = $this->isMethodChanged($methodName, $methodBody, $fileChanges);
+                
+                $testMethods[$methodName] = [
+                    'steps' => $steps,
+                    'changed' => $isMethodChanged,
+                    'isNew' => $isMethodChanged && $fileChanges
+                ];
             }
         }
         
         if (!empty($testMethods)) {
-            $this->generateClassDiagram($className, $testMethods);
+            $this->generateClassDiagram($className, $testMethods, $isChanged);
         }
+    }
+
+    private function isMethodChanged(string $methodName, string $methodBody, ?array $fileChanges): bool
+    {
+        if (!$fileChanges) return false;
+        
+        // Check if method name appears in added or modified lines
+        foreach ($fileChanges['added'] as $line) {
+            if (strpos($line, $methodName) !== false) return true;
+        }
+        
+        // Check if any method content appears in changes
+        $methodLines = explode("\n", $methodBody);
+        foreach ($methodLines as $methodLine) {
+            $trimmedLine = trim($methodLine);
+            if (empty($trimmedLine)) continue;
+            
+            foreach ($fileChanges['added'] as $addedLine) {
+                if (strpos($addedLine, $trimmedLine) !== false) return true;
+            }
+        }
+        
+        return false;
     }
 
     private function analyzeTestMethod(string $methodBody): array
@@ -96,7 +199,7 @@ class TestDiagramGenerator
         return $steps;
     }
 
-    private function generateClassDiagram(string $className, array $testMethods): void
+    private function generateClassDiagram(string $className, array $testMethods, bool $isFileChanged = false): void
     {
         $diagram = "```mermaid\nsequenceDiagram\n";
         $diagram .= "    participant User\n";
@@ -104,12 +207,37 @@ class TestDiagramGenerator
         $diagram .= "    participant App as PHP App\n";
         $diagram .= "    participant DB as Database\n\n";
         
-        foreach ($testMethods as $methodName => $steps) {
-            $diagram .= "    %% Test: " . $this->formatMethodName($methodName) . "\n";
-            $diagram .= "    Note over User,DB: " . $this->formatMethodName($methodName) . "\n";
+        // Add change indicator if file was modified
+        if ($isFileChanged) {
+            $diagram .= "    Note over User,DB: 🔄 RECENTLY MODIFIED\n\n";
+        }
+        
+        foreach ($testMethods as $methodName => $methodData) {
+            $steps = $methodData['steps'];
+            $isChanged = $methodData['changed'];
+            $isNew = $methodData['isNew'];
+            
+            $changeIndicator = '';
+            if ($isNew) {
+                $changeIndicator = ' 🆕 NEW';
+            } elseif ($isChanged) {
+                $changeIndicator = ' 🔄 MODIFIED';
+            }
+            
+            $diagram .= "    %% Test: " . $this->formatMethodName($methodName) . $changeIndicator . "\n";
+            
+            if ($isChanged) {
+                $diagram .= "    rect rgb(255, 245, 230)\n"; // Light orange background for changed tests
+            }
+            
+            $diagram .= "    Note over User,DB: " . $this->formatMethodName($methodName) . $changeIndicator . "\n";
             
             foreach ($steps as $step) {
-                $diagram .= $this->convertStepToMermaid($step);
+                $diagram .= $this->convertStepToMermaid($step, $isChanged);
+            }
+            
+            if ($isChanged) {
+                $diagram .= "    end\n"; // Close the rect
             }
             
             $diagram .= "\n";
@@ -119,41 +247,61 @@ class TestDiagramGenerator
         
         $fileName = $this->outputDir . '/' . strtolower($className) . '.md';
         $content = "# {$className} Test Flow\n\n";
+        
+        if ($isFileChanged) {
+            $content .= "🔄 **This test class was recently modified**\n\n";
+        }
+        
         $content .= "This diagram shows the test flow for {$className}.\n\n";
+        
+        // Add legend for changes
+        if ($isFileChanged) {
+            $content .= "## Legend\n";
+            $content .= "- 🆕 **NEW** - Recently added test method\n";
+            $content .= "- 🔄 **MODIFIED** - Recently changed test method\n";
+            $content .= "- Orange background - Indicates recent changes\n\n";
+        }
+        
         $content .= $diagram;
         
         file_put_contents($fileName, $content);
         
+        $changedMethodsCount = count(array_filter($testMethods, fn($m) => $m['changed']));
+        
         $this->diagrams[$className] = [
             'file' => $fileName,
             'methods' => array_keys($testMethods),
-            'stepCount' => array_sum(array_map('count', $testMethods))
+            'stepCount' => array_sum(array_map(fn($m) => count($m['steps']), $testMethods)),
+            'changed' => $isFileChanged,
+            'changedMethods' => $changedMethodsCount
         ];
     }
 
-    private function convertStepToMermaid(string $step): string
+    private function convertStepToMermaid(string $step, bool $isChanged = false): string
     {
+        $highlight = $isChanged ? ' 🔄' : '';
+        
         if (strpos($step, 'Navigate to') === 0) {
-            return "    User->>Browser: {$step}\n    Browser->>App: HTTP Request\n    App-->>Browser: Page Response\n";
+            return "    User->>Browser: {$step}{$highlight}\n    Browser->>App: HTTP Request\n    App-->>Browser: Page Response\n";
         }
         
         if (strpos($step, 'Verify') === 0) {
-            return "    Browser->>App: {$step}\n    App-->>Browser: Validation Result\n";
+            return "    Browser->>App: {$step}{$highlight}\n    App-->>Browser: Validation Result\n";
         }
         
         if (strpos($step, 'Click') === 0) {
-            return "    User->>Browser: {$step}\n    Browser->>App: Action Request\n";
+            return "    User->>Browser: {$step}{$highlight}\n    Browser->>App: Action Request\n";
         }
         
         if (strpos($step, 'Fill') === 0) {
-            return "    User->>Browser: {$step}\n";
+            return "    User->>Browser: {$step}{$highlight}\n";
         }
         
         if (strpos($step, 'Submit') === 0) {
-            return "    User->>Browser: {$step}\n    Browser->>App: Form Data\n    App->>DB: Store Data\n    DB-->>App: Confirmation\n    App-->>Browser: Success Response\n";
+            return "    User->>Browser: {$step}{$highlight}\n    Browser->>App: Form Data\n    App->>DB: Store Data\n    DB-->>App: Confirmation\n    App-->>Browser: Success Response\n";
         }
         
-        return "    Note over User,DB: {$step}\n";
+        return "    Note over User,DB: {$step}{$highlight}\n";
     }
 
     private function formatMethodName(string $methodName): string
@@ -170,7 +318,17 @@ class TestDiagramGenerator
         
         foreach ($this->diagrams as $className => $info) {
             $sanitizedName = str_replace(['Cest', 'Test'], '', $className);
-            $diagram .= "    {$sanitizedName}[{$sanitizedName}<br/>{$info['stepCount']} steps]\n";
+            $changeIndicator = $info['changed'] ? ' 🔄' : '';
+            $stepInfo = "{$info['stepCount']} steps";
+            
+            if ($info['changed']) {
+                $stepInfo .= ", {$info['changedMethods']} modified";
+                $diagram .= "    {$sanitizedName}[{$sanitizedName}{$changeIndicator}<br/>{$stepInfo}]\n";
+                $diagram .= "    style {$sanitizedName} fill:#fff5e6,stroke:#ff8c00,stroke-width:2px\n"; // Orange styling for changed classes
+            } else {
+                $diagram .= "    {$sanitizedName}[{$sanitizedName}<br/>{$stepInfo}]\n";
+            }
+            
             $diagram .= "    Start --> {$sanitizedName}\n";
             
             foreach ($info['methods'] as $method) {
@@ -193,27 +351,127 @@ class TestDiagramGenerator
         
         $content = "# Test Suite Overview\n\n";
         $content .= "This diagram shows the complete test suite structure.\n\n";
+        
+        // Add recent changes summary
+        if (!empty($this->gitChanges['commits'])) {
+            $content .= "## Recent Changes\n\n";
+            $content .= "Last {$this->commitsToCheck} commits:\n";
+            foreach ($this->gitChanges['commits'] as $commit) {
+                $content .= "- `{$commit}`\n";
+            }
+            $content .= "\n🔄 Orange highlighted items indicate recent modifications.\n\n";
+        }
+        
         $content .= $diagram;
         
         file_put_contents($this->outputDir . '/overview.md', $content);
     }
 
+    private function generateChangelogDiagram(): void
+    {
+        if (empty($this->gitChanges['commits'])) {
+            return; // No changes to document
+        }
+
+        $diagram = "```mermaid\ngitgraph\n";
+        $diagram .= "    commit id: \"Baseline\"\n";
+        
+        foreach (array_reverse($this->gitChanges['commits']) as $index => $commit) {
+            $commitHash = explode(' ', $commit)[0];
+            $commitMsg = substr($commit, strlen($commitHash) + 1);
+            $shortMsg = strlen($commitMsg) > 30 ? substr($commitMsg, 0, 30) . '...' : $commitMsg;
+            
+            $diagram .= "    commit id: \"{$shortMsg}\"\n";
+        }
+        
+        $diagram .= "```\n";
+        
+        $content = "# Test Changes Timeline\n\n";
+        $content .= "Recent changes to test files in the last {$this->commitsToCheck} commits.\n\n";
+        $content .= "Generated: {$this->gitChanges['timestamp']}\n\n";
+        
+        $content .= $diagram;
+        
+        // Add detailed changes
+        if (!empty($this->gitChanges['testChanges'])) {
+            $content .= "\n## Detailed Changes\n\n";
+            foreach ($this->gitChanges['testChanges'] as $file => $changes) {
+                $content .= "### {$file}\n\n";
+                
+                if (!empty($changes['added'])) {
+                    $content .= "**Added lines:**\n";
+                    foreach (array_slice($changes['added'], 0, 5) as $line) { // Show first 5 additions
+                        $content .= "- `{$line}`\n";
+                    }
+                    if (count($changes['added']) > 5) {
+                        $content .= "- ... and " . (count($changes['added']) - 5) . " more\n";
+                    }
+                    $content .= "\n";
+                }
+                
+                if (!empty($changes['removed'])) {
+                    $content .= "**Removed lines:**\n";
+                    foreach (array_slice($changes['removed'], 0, 5) as $line) { // Show first 5 removals
+                        $content .= "- ~~`{$line}`~~\n";
+                    }
+                    if (count($changes['removed']) > 5) {
+                        $content .= "- ... and " . (count($changes['removed']) - 5) . " more\n";
+                    }
+                    $content .= "\n";
+                }
+            }
+        }
+        
+        file_put_contents($this->outputDir . '/changelog.md', $content);
+    }
+
     private function generateReadme(): void
     {
         $readme = "# Test Documentation Diagrams\n\n";
-        $readme .= "Auto-generated Mermaid diagrams for test cases.\n\n";
+        $readme .= "Auto-generated Mermaid diagrams for test cases with change tracking.\n\n";
+        
+        // Add changes summary
+        if (!empty($this->gitChanges['commits'])) {
+            $readme .= "## 🔄 Recent Changes\n\n";
+            $readme .= "Tracking changes from last {$this->commitsToCheck} commits:\n";
+            foreach (array_slice($this->gitChanges['commits'], 0, 3) as $commit) {
+                $readme .= "- `{$commit}`\n";
+            }
+            if (count($this->gitChanges['commits']) > 3) {
+                $readme .= "- ... and " . (count($this->gitChanges['commits']) - 3) . " more\n";
+            }
+            $readme .= "\n";
+        }
+        
         $readme .= "## Test Classes\n\n";
         
         foreach ($this->diagrams as $className => $info) {
             $fileName = basename($info['file']);
-            $readme .= "- [{$className}]({$fileName}) - {$info['stepCount']} test steps across " . count($info['methods']) . " methods\n";
+            $changeIndicator = $info['changed'] ? ' 🔄' : '';
+            $changeInfo = $info['changed'] ? " ({$info['changedMethods']} methods modified)" : '';
+            
+            $readme .= "- [{$className}]({$fileName}){$changeIndicator} - {$info['stepCount']} test steps across " . count($info['methods']) . " methods{$changeInfo}\n";
         }
         
-        $readme .= "\n## Overview\n\n";
-        $readme .= "- [Test Suite Overview](overview.md) - Complete test flow\n\n";
-        $readme .= "---\n\n";
+        $readme .= "\n## Documentation\n\n";
+        $readme .= "- [Test Suite Overview](overview.md) - Complete test flow\n";
+        
+        if (!empty($this->gitChanges['commits'])) {
+            $readme .= "- [Change Timeline](changelog.md) - Recent modifications\n";
+        }
+        
+        $readme .= "\n## Legend\n\n";
+        $readme .= "- 🔄 **Recently Modified** - Changed in last {$this->commitsToCheck} commits\n";
+        $readme .= "- 🆕 **New** - Recently added test methods\n";
+        $readme .= "- Orange highlighting - Indicates recent changes\n";
+        
+        $readme .= "\n---\n\n";
         $readme .= "*Generated on: " . date('Y-m-d H:i:s') . "*\n";
         $readme .= "*Source: Codeception test files in `tests/Acceptance/`*\n";
+        
+        if (!empty($this->gitChanges['commits'])) {
+            $readme .= "*Change tracking: Last {$this->commitsToCheck} commits*\n";
+        }
         
         file_put_contents($this->outputDir . '/README.md', $readme);
     }
@@ -221,6 +479,18 @@ class TestDiagramGenerator
 
 // Run the generator
 if (php_sapi_name() === 'cli') {
-    $generator = new TestDiagramGenerator();
+    // Allow customization via command line arguments
+    $commitsToCheck = isset($argv[1]) ? (int)$argv[1] : 5;
+    $testDir = isset($argv[2]) ? $argv[2] : 'tests/Acceptance';
+    $outputDir = isset($argv[3]) ? $argv[3] : 'docs/diagrams';
+    
+    echo "🚀 Starting Test Diagram Generator\n";
+    echo "📂 Test Directory: {$testDir}\n";
+    echo "📁 Output Directory: {$outputDir}\n";
+    echo "📊 Checking last {$commitsToCheck} commits\n\n";
+    
+    $generator = new TestDiagramGenerator($testDir, $outputDir, $commitsToCheck);
     $generator->generateAll();
+    
+    echo "\n🎉 Documentation generation complete!\n";
 }

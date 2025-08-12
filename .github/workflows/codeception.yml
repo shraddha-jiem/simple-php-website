@@ -56,8 +56,8 @@ jobs:
     
     - name: Generate test documentation diagrams
       run: |
-        chmod +x scripts/generate-docs.sh
-        ./scripts/generate-docs.sh
+        chmod +x generate-docs.sh
+        ./generate-docs.sh 10
     
     - name: Upload test results
       if: always()

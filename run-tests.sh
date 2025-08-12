@@ -129,18 +129,22 @@ case "$1" in
     "test")
         start_server
         run_tests
+        ./generate-docs.sh
         ;;
     "acceptance")
         start_server
         run_tests "Acceptance"
+        ./generate-docs.sh
         ;;
     "navigation")
         start_server
         vendor/bin/codecept run Acceptance WebsiteNavigationCest
+        ./generate-docs.sh
         ;;
     "database")
         start_server
         vendor/bin/codecept run Acceptance DatabaseStatusCest
+        ./generate-docs.sh
         ;;
     "steps")
         start_server
@@ -152,7 +156,7 @@ case "$1" in
         ;;
     "docs")
         print_status "Generating test documentation diagrams..."
-        ./scripts/generate-docs.sh
+        ./generate-docs.sh
         ;;
     "help"|"--help"|"-h")
         show_usage

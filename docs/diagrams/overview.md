@@ -2,6 +2,17 @@
 
 This diagram shows the complete test suite structure.
 
+## Recent Changes
+
+Last 5 commits:
+- `3a86f15 🤖 Auto-update test documentation diagrams`
+- `f6a8983 Added new page to test the auto-update of docs`
+- `f542121 🤖 Auto-update test documentation diagrams`
+- `e05d5a5 Added docs for testing`
+- `6ec83ae Fixed the test reports in pipeline`
+
+🔄 Orange highlighted items indicate recent modifications.
+
 ```mermaid
 flowchart TD
     Start([Test Suite Start])
@@ -23,7 +34,8 @@ flowchart TD
     DatabaseStatus --> DatabaseStatus_verifyStatusPageLayoutAndStructure
     DatabaseStatus_verifyEnvironmentVariablesUsage[Verify Environment Variables Usage]
     DatabaseStatus --> DatabaseStatus_verifyEnvironmentVariablesUsage
-    WebsiteNavigation[WebsiteNavigation<br/>47 steps]
+    WebsiteNavigation[WebsiteNavigation 🔄<br/>47 steps, 8 modified]
+    style WebsiteNavigation fill:#fff5e6,stroke:#ff8c00,stroke-width:2px
     Start --> WebsiteNavigation
     WebsiteNavigation_displayHomePageByDefault[Display Home Page By Default]
     WebsiteNavigation --> WebsiteNavigation_displayHomePageByDefault
