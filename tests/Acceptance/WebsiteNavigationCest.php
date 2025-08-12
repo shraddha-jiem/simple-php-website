@@ -82,6 +82,20 @@ final class WebsiteNavigationCest
         $I->see('Contact', 'h2');
     }
 
+
+    /**
+     * Test: Navigate to Check page
+     */
+    public function navigateToCheckPage(AcceptanceTester $I): void
+    {
+        $I->amOnPage('/');
+        $I->click('Check');
+        $I->seeCurrentUrlMatches('/\?page=check/');
+        $I->seeInTitle('Check | Simple PHP Website (Master)');
+        $I->see('Check', 'h2');
+    }
+
+
     /**
      * Test: Access Status page with system information
      * 
