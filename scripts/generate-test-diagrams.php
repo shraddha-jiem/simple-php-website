@@ -69,7 +69,7 @@ class TestDiagramGenerator
             $testFileChanges = [];
             foreach ($changedFiles as $file) {
                 if (strpos($file, 'tests/') === 0 && strpos($file, 'Cest.php') !== false) {
-                    $changes = shell_exec("git diff HEAD~{$this->commitsToCheck}..HEAD --unified=0 '$file'");
+                    $changes = shell_exec("git diff HEAD~{$this->commitsToCheck}..HEAD --unified=3 '$file'");
                     $testFileChanges[$file] = $this->parseGitDiff($changes);
                 }
             }
@@ -146,19 +146,24 @@ class TestDiagramGenerator
     {
         if (!$fileChanges) return false;
         
-        // Check if method name appears in added or modified lines
+        // Check if method name appears in added lines (indicates new method)
         foreach ($fileChanges['added'] as $line) {
-            if (strpos($line, $methodName) !== false) return true;
+            if (strpos($line, "public function {$methodName}") !== false) {
+                return true;
+            }
         }
         
-        // Check if any method content appears in changes
+        // Check if any significant method content appears in changes (indicates modification)
         $methodLines = explode("\n", $methodBody);
         foreach ($methodLines as $methodLine) {
             $trimmedLine = trim($methodLine);
-            if (empty($trimmedLine)) continue;
+            if (empty($trimmedLine) || strpos($trimmedLine, '//') === 0 || strlen($trimmedLine) < 15) continue;
             
             foreach ($fileChanges['added'] as $addedLine) {
-                if (strpos($addedLine, $trimmedLine) !== false) return true;
+                // Look for exact matches of significant code lines
+                if (strpos($addedLine, $trimmedLine) !== false) {
+                    return true;
+                }
             }
         }
         

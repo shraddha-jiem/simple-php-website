@@ -1,6 +1,13 @@
 # WebsiteNavigationCest Test Flow
 
+🔄 **This test class was recently modified**
+
 This diagram shows the test flow for WebsiteNavigationCest.
+
+## Legend
+- 🆕 **NEW** - Recently added test method
+- 🔄 **MODIFIED** - Recently changed test method
+- Orange background - Indicates recent changes
 
 ```mermaid
 sequenceDiagram
@@ -8,6 +15,8 @@ sequenceDiagram
     participant Browser
     participant App as PHP App
     participant DB as Database
+
+    Note over User,DB: 🔄 RECENTLY MODIFIED
 
     %% Test: Display Home Page By Default
     Note over User,DB: Display Home Page By Default
@@ -71,17 +80,19 @@ sequenceDiagram
     Browser->>App: Verify title: Check | Simple PHP Website (Master)
     App-->>Browser: Validation Result
 
-    %% Test: Navigate To New Page
-    Note over User,DB: Navigate To New Page
-    User->>Browser: Navigate to /
+    %% Test: Navigate To New Page 🆕 NEW
+    rect rgb(255, 245, 230)
+    Note over User,DB: Navigate To New Page 🆕 NEW
+    User->>Browser: Navigate to / 🔄
     Browser->>App: HTTP Request
     App-->>Browser: Page Response
-    Browser->>App: Verify text: Newpage
+    Browser->>App: Verify text: Newpage 🔄
     App-->>Browser: Validation Result
-    User->>Browser: Click: Newpage
+    User->>Browser: Click: Newpage 🔄
     Browser->>App: Action Request
-    Browser->>App: Verify title: Newpage | Simple PHP Website (Master)
+    Browser->>App: Verify title: Newpage | Simple PHP Website (Master) 🔄
     App-->>Browser: Validation Result
+    end
 
     %% Test: Access Status Page With System Information
     Note over User,DB: Access Status Page With System Information
