@@ -76,7 +76,7 @@ sequenceDiagram
     User->>Browser: Navigate to /
     Browser->>App: HTTP Request
     App-->>Browser: Page Response
-    Browser->>App: Verify text: New Page
+    Browser->>App: Verify text: Newpage
     App-->>Browser: Validation Result
     User->>Browser: Click: New Page
     Browser->>App: Action Request

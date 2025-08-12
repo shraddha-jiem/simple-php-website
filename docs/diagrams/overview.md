@@ -4,8 +4,8 @@ This diagram shows the complete test suite structure.
 
 ## Recent Changes
 
-Last 10 commits:
-- `c06ce25 Added a new page with tests for testing auto-generation of docs`
+Last 3 commits:
+- `7a3b2ee highlight git changes for last 3 commits. new page test to pass`
 
 🔄 Orange highlighted items indicate recent modifications.
 

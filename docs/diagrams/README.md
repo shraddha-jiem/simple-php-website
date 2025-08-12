@@ -4,8 +4,8 @@ Auto-generated Mermaid diagrams for test cases with change tracking.
 
 ## 🔄 Recent Changes
 
-Tracking changes from last 10 commits:
-- `c06ce25 Added a new page with tests for testing auto-generation of docs`
+Tracking changes from last 3 commits:
+- `7a3b2ee highlight git changes for last 3 commits. new page test to pass`
 
 ## Test Classes
 
@@ -19,12 +19,12 @@ Tracking changes from last 10 commits:
 
 ## Legend
 
-- 🔄 **Recently Modified** - Changed in last 10 commits
+- 🔄 **Recently Modified** - Changed in last 3 commits
 - 🆕 **New** - Recently added test methods
 - Orange highlighting - Indicates recent changes
 
 ---
 
-*Generated on: 2025-08-12 13:08:35*
+*Generated on: 2025-08-12 13:15:29*
 *Source: Codeception test files in `tests/Acceptance/`*
-*Change tracking: Last 10 commits*
+*Change tracking: Last 3 commits*
