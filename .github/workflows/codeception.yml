@@ -61,9 +61,21 @@ jobs:
         name: test-results-php-${{ matrix.php-version }}
         path: tests/_output/
     
+    - name: Verify test results exist
+      if: always()
+      run: |
+        echo "Checking for test result files..."
+        ls -la tests/_output/
+        if [ -f "tests/_output/report.xml" ]; then
+          echo "✅ XML report found"
+          echo "Test count: $(grep -o 'tests="[0-9]*"' tests/_output/report.xml)"
+        else
+          echo "❌ XML report not found"
+        fi
+    
     - name: Publish test results
       if: always()
       uses: EnricoMi/publish-unit-test-result-action@v2
       with:
-        files: tests/_output/result.xml
+        files: tests/_output/report.xml
         check_name: "Test Results (PHP ${{ matrix.php-version }})"
