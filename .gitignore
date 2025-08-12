@@ -10,6 +10,10 @@ tests/_output/
 tests/_support/_generated/
 .server.pid
 
+# Keep empty test directories tracked
+!tests/Unit/.gitkeep
+!tests/Functional/.gitkeep
+
 # IDE and Editor files
 .vscode/
 *.swp
