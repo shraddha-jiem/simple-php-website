@@ -78,9 +78,9 @@ sequenceDiagram
     App-->>Browser: Page Response
     Browser->>App: Verify text: Newpage
     App-->>Browser: Validation Result
-    User->>Browser: Click: New Page
+    User->>Browser: Click: Newpage
     Browser->>App: Action Request
-    Browser->>App: Verify title: New Page | Simple PHP Website (Master)
+    Browser->>App: Verify title: Newpage | Simple PHP Website (Master)
     App-->>Browser: Validation Result
 
     %% Test: Access Status Page With System Information
