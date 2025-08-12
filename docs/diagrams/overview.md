@@ -4,12 +4,8 @@ This diagram shows the complete test suite structure.
 
 ## Recent Changes
 
-Last 5 commits:
-- `3a86f15 🤖 Auto-update test documentation diagrams`
-- `f6a8983 Added new page to test the auto-update of docs`
-- `f542121 🤖 Auto-update test documentation diagrams`
-- `e05d5a5 Added docs for testing`
-- `6ec83ae Fixed the test reports in pipeline`
+Last 10 commits:
+- `c06ce25 Added a new page with tests for testing auto-generation of docs`
 
 🔄 Orange highlighted items indicate recent modifications.
 
@@ -34,8 +30,7 @@ flowchart TD
     DatabaseStatus --> DatabaseStatus_verifyStatusPageLayoutAndStructure
     DatabaseStatus_verifyEnvironmentVariablesUsage[Verify Environment Variables Usage]
     DatabaseStatus --> DatabaseStatus_verifyEnvironmentVariablesUsage
-    WebsiteNavigation[WebsiteNavigation 🔄<br/>47 steps, 8 modified]
-    style WebsiteNavigation fill:#fff5e6,stroke:#ff8c00,stroke-width:2px
+    WebsiteNavigation[WebsiteNavigation<br/>51 steps]
     Start --> WebsiteNavigation
     WebsiteNavigation_displayHomePageByDefault[Display Home Page By Default]
     WebsiteNavigation --> WebsiteNavigation_displayHomePageByDefault
@@ -47,6 +42,8 @@ flowchart TD
     WebsiteNavigation --> WebsiteNavigation_navigateToContactPage
     WebsiteNavigation_navigateToCheckPage[Navigate To Check Page]
     WebsiteNavigation --> WebsiteNavigation_navigateToCheckPage
+    WebsiteNavigation_navigateToNewPage[Navigate To New Page]
+    WebsiteNavigation --> WebsiteNavigation_navigateToNewPage
     WebsiteNavigation_accessStatusPageWithSystemInformation[Access Status Page With System Information]
     WebsiteNavigation --> WebsiteNavigation_accessStatusPageWithSystemInformation
     WebsiteNavigation_handleNonExistentPageWith404Error[Handle Non Existent Page With404Error]
@@ -73,6 +70,7 @@ flowchart TD
     WebsiteNavigation_navigateToProductsPage --> End
     WebsiteNavigation_navigateToContactPage --> End
     WebsiteNavigation_navigateToCheckPage --> End
+    WebsiteNavigation_navigateToNewPage --> End
     WebsiteNavigation_accessStatusPageWithSystemInformation --> End
     WebsiteNavigation_handleNonExistentPageWith404Error --> End
     WebsiteNavigation_verifyNavigationMenuIsPresentOnAllPages --> End
