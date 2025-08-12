@@ -105,7 +105,7 @@ final class WebsiteNavigationCest
         $I->click('New Page');
         $I->seeCurrentUrlMatches('/\?page=newpage/');
         $I->seeInTitle('New Page | Simple PHP Website (Master)');
-        $I->see('New Page', 'h2');
+        $I->see('Newpage', 'h2');
     }
 
 

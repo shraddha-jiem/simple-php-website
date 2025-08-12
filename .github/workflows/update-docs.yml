@@ -26,7 +26,7 @@ jobs:
     - name: Generate test documentation
       run: |
         chmod +x generate-docs.sh
-        ./generate-docs.sh 10
+        ./generate-docs.sh 3
     
     - name: Check for changes
       id: verify-changed-files
