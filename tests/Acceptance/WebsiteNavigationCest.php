@@ -102,9 +102,9 @@ final class WebsiteNavigationCest
     public function navigateToNewPage(AcceptanceTester $I): void
     {
         $I->amOnPage('/');
-        $I->click('New Page');
+        $I->click('Newpage');
         $I->seeCurrentUrlMatches('/\?page=newpage/');
-        $I->seeInTitle('New Page | Simple PHP Website (Master)');
+        $I->seeInTitle('Newpage | Simple PHP Website (Master)');
         $I->see('Newpage', 'h2');
     }
 
