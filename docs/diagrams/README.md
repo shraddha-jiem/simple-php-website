@@ -5,7 +5,7 @@ Auto-generated Mermaid diagrams for test cases.
 ## Test Classes
 
 - [DatabaseStatusCest](databasestatuscest.md) - 46 test steps across 8 methods
-- [WebsiteNavigationCest](websitenavigationcest.md) - 43 test steps across 10 methods
+- [WebsiteNavigationCest](websitenavigationcest.md) - 47 test steps across 11 methods
 
 ## Overview
 
@@ -13,5 +13,5 @@ Auto-generated Mermaid diagrams for test cases.
 
 ---
 
-*Generated on: 2025-08-12 11:44:51*
+*Generated on: 2025-08-12 12:04:19*
 *Source: Codeception test files in `tests/Acceptance/`*
