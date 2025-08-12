@@ -18,6 +18,7 @@ function config($key = '')
             'contact' => 'Contact',
             'status' => 'Status',
             'check' => 'Check',
+            'newpage' => 'New Page',
         ],
         'template_path' => 'template',
         'content_path' => 'content',

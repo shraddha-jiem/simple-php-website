@@ -97,6 +97,19 @@ final class WebsiteNavigationCest
 
 
     /**
+     * Test: Navigate to New Page page
+     */
+    public function navigateToNewPage(AcceptanceTester $I): void
+    {
+        $I->amOnPage('/');
+        $I->click('New Page');
+        $I->seeCurrentUrlMatches('/\?page=newpage/');
+        $I->seeInTitle('New Page | Simple PHP Website (Master)');
+        $I->see('New Page', 'h2');
+    }
+
+
+    /**
      * Test: Access Status page with system information
      * 
      * Scenario: Access Status page with system information
