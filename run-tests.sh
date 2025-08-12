@@ -104,6 +104,7 @@ show_usage() {
     echo "  database            Run database status tests only"
     echo "  steps               Run tests with detailed steps"
     echo "  debug               Run tests with debug output"
+    echo "  docs                Generate test documentation diagrams"
     echo "  help                Show this help message"
     echo ""
     echo "Examples:"
@@ -114,6 +115,7 @@ show_usage() {
     echo "  $0 database                       # Run database tests only"
     echo "  $0 steps                          # Run with step details"
     echo "  $0 debug                          # Run with debug output"
+    echo "  $0 docs                           # Generate documentation"
 }
 
 # Main script logic
@@ -147,6 +149,10 @@ case "$1" in
     "debug")
         start_server
         run_tests "" "--debug"
+        ;;
+    "docs")
+        print_status "Generating test documentation diagrams..."
+        ./scripts/generate-docs.sh
         ;;
     "help"|"--help"|"-h")
         show_usage

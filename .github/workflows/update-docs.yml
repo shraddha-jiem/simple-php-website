@@ -1,0 +1,51 @@
+name: Update Test Documentation
+
+on:
+  push:
+    paths:
+      - 'tests/Acceptance/**/*.php'
+      - 'scripts/generate-test-diagrams.php'
+    branches: [ master, main, develop ]
+
+jobs:
+  update-docs:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 8.1
+        extensions: mbstring, xml
+    
+    - name: Generate test documentation
+      run: |
+        chmod +x scripts/generate-docs.sh
+        ./scripts/generate-docs.sh
+    
+    - name: Check for changes
+      id: verify-changed-files
+      run: |
+        if [ -n "$(git status --porcelain docs/diagrams/)" ]; then
+          echo "changed=true" >> $GITHUB_OUTPUT
+        else
+          echo "changed=false" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Commit documentation changes
+      if: steps.verify-changed-files.outputs.changed == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add docs/diagrams/
+        git commit -m "🤖 Auto-update test documentation diagrams
+        
+        - Updated Mermaid sequence diagrams
+        - Generated from latest test changes
+        - Commit: ${{ github.sha }}"
+        git push

@@ -54,12 +54,24 @@ jobs:
     - name: Run Codeception tests
       run: vendor/bin/codecept run Acceptance --xml --html
     
+    - name: Generate test documentation diagrams
+      run: |
+        chmod +x scripts/generate-docs.sh
+        ./scripts/generate-docs.sh
+    
     - name: Upload test results
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: test-results-php-${{ matrix.php-version }}
         path: tests/_output/
+    
+    - name: Upload test documentation
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-diagrams-php-${{ matrix.php-version }}
+        path: docs/diagrams/
     
     - name: Verify test results exist
       if: always()

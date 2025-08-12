@@ -28,7 +28,9 @@
         "test-acceptance": "codecept run acceptance",
         "test-functional": "codecept run functional",
         "test-unit": "codecept run unit",
-        "serve": "php -S localhost:8000"
+        "serve": "php -S localhost:8000",
+        "docs": "./scripts/generate-docs.sh",
+        "docs-generate": "php scripts/generate-test-diagrams.php"
     },
     "config": {
         "optimize-autoloader": true,
