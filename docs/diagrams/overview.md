@@ -4,12 +4,17 @@ This diagram shows the complete test suite structure.
 
 ## Recent Changes
 
-Last 5 commits (excluding auto-generated):
+Last 10 commits (excluding auto-generated):
+- `7867799 AI changes`
 - `2be8ed8 Added one page for testing`
 - `d557fd2 Cleanup`
 - `4b4007a Added last page for testing`
 - `73d78bb More changes to fix the highlighting`
 - `ac5649b Added onemore page to test`
+- `8c99884 Updated docs`
+- `571145c New page and testcases added for final`
+- `e0b9f7d Fixed the highlighting`
+- `376c435 Changes in testcases`
 
 🔄 Orange highlighted items indicate recent modifications.
 

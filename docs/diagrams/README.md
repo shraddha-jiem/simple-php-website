@@ -4,11 +4,11 @@ Auto-generated Mermaid diagrams for test cases with change tracking.
 
 ## 🔄 Recent Changes
 
-Tracking changes from last 5 commits (excluding auto-generated):
+Tracking changes from last 10 commits (excluding auto-generated):
+- `7867799 AI changes`
 - `2be8ed8 Added one page for testing`
 - `d557fd2 Cleanup`
-- `4b4007a Added last page for testing`
-- ... and 2 more
+- ... and 7 more
 
 ## Test Classes
 
@@ -22,12 +22,12 @@ Tracking changes from last 5 commits (excluding auto-generated):
 
 ## Legend
 
-- 🔄 **Recently Modified** - Changed in last 5 commits (excluding auto-generated)
+- 🔄 **Recently Modified** - Changed in last 10 commits (excluding auto-generated)
 - 🆕 **New** - Recently added test methods
 - Orange highlighting - Indicates recent changes
 
 ---
 
-*Generated on: 2025-08-13 03:20:43*
+*Generated on: 2025-08-13 03:22:04*
 *Source: Codeception test files in `tests/Acceptance/`*
-*Change tracking: Last 5 commits (excluding auto-generated)*
+*Change tracking: Last 10 commits (excluding auto-generated)*
