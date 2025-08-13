@@ -95,6 +95,18 @@ final class WebsiteNavigationCest
         $I->see('Checking', 'h2');
     }
 
+    /**
+     * Test: Navigate to Checking page
+     */
+    public function navigateToTestingPage(AcceptanceTester $I): void
+    {
+        $I->amOnPage('/');
+        $I->click('Testing');
+        $I->seeCurrentUrlMatches('/\?page=testing/');
+        $I->seeInTitle('Testing | Simple PHP Website (Master)');
+        $I->see('Testing', 'h2');
+    }
+
 
     /**
      * Test: Access Status page with system information
