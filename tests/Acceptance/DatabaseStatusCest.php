@@ -131,7 +131,7 @@ final class DatabaseStatusCest
     {
         $I->amOnPage('/?page=status');
         
-        $I->see('ready for deployment to AWS');
+        $I->see('ready for automatic deployment to AWS');
         $I->see('Terraform');
         $I->see('Terragrunt');
         $I->see('infrastructure management');
