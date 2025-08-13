@@ -134,6 +134,18 @@ final class WebsiteNavigationCest
         $I->see('Onemore', 'h2');
     }
 
+    /**
+     * Test: Navigate to Last page
+     */
+    public function navigateToLastPage(AcceptanceTester $I): void
+    {
+        $I->amOnPage('/');
+        $I->click('Last');
+        $I->seeCurrentUrlMatches('/\?page=last/');
+        $I->seeInTitle('Last | Simple PHP Website (Master)');
+        $I->see('Last', 'h2');
+    }
+
 
 
     /**

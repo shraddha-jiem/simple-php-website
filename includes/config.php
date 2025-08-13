@@ -21,6 +21,7 @@ function config($key = '')
             'newpage' => 'Newpage',
             'final' => 'Final',
             'onemore' => 'Onemore',
+            'last' => 'Last',
         ],
         'template_path' => 'template',
         'content_path' => 'content',
