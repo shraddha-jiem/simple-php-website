@@ -4,17 +4,8 @@ This diagram shows the complete test suite structure.
 
 ## Recent Changes
 
-<<<<<<< Updated upstream
 Last 1 commits (excluding auto-generated):
-- `4b4007a Added last page for testing`
-=======
-Last 5 commits (excluding auto-generated):
-- `4b4007a Added last page for testing`
-- `73d78bb More changes to fix the highlighting`
-- `ac5649b Added onemore page to test`
-- `8c99884 Updated docs`
-- `571145c New page and testcases added for final`
->>>>>>> Stashed changes
+- `d557fd2 Cleanup`
 
 🔄 Orange highlighted items indicate recent modifications.
 
@@ -39,12 +30,7 @@ flowchart TD
     DatabaseStatus --> DatabaseStatus_verifyStatusPageLayoutAndStructure
     DatabaseStatus_verifyEnvironmentVariablesUsage[Verify Environment Variables Usage]
     DatabaseStatus --> DatabaseStatus_verifyEnvironmentVariablesUsage
-<<<<<<< Updated upstream
-    WebsiteNavigation[WebsiteNavigation<br/>63 steps]
-=======
-    WebsiteNavigation[WebsiteNavigation 🔄<br/>63 steps, 12 modified]
-    style WebsiteNavigation fill:#fff5e6,stroke:#ff8c00,stroke-width:2px
->>>>>>> Stashed changes
+    WebsiteNavigation[WebsiteNavigation<br/>43 steps]
     Start --> WebsiteNavigation
     WebsiteNavigation_displayHomePageByDefault[Display Home Page By Default]
     WebsiteNavigation --> WebsiteNavigation_displayHomePageByDefault
@@ -54,16 +40,6 @@ flowchart TD
     WebsiteNavigation --> WebsiteNavigation_navigateToProductsPage
     WebsiteNavigation_navigateToContactPage[Navigate To Contact Page]
     WebsiteNavigation --> WebsiteNavigation_navigateToContactPage
-    WebsiteNavigation_navigateToCheckPage[Navigate To Check Page]
-    WebsiteNavigation --> WebsiteNavigation_navigateToCheckPage
-    WebsiteNavigation_navigateToNewPage[Navigate To New Page]
-    WebsiteNavigation --> WebsiteNavigation_navigateToNewPage
-    WebsiteNavigation_navigateToFinalPage[Navigate To Final Page]
-    WebsiteNavigation --> WebsiteNavigation_navigateToFinalPage
-    WebsiteNavigation_navigateToOnemorePage[Navigate To Onemore Page]
-    WebsiteNavigation --> WebsiteNavigation_navigateToOnemorePage
-    WebsiteNavigation_navigateToLastPage[Navigate To Last Page]
-    WebsiteNavigation --> WebsiteNavigation_navigateToLastPage
     WebsiteNavigation_accessStatusPageWithSystemInformation[Access Status Page With System Information]
     WebsiteNavigation --> WebsiteNavigation_accessStatusPageWithSystemInformation
     WebsiteNavigation_handleNonExistentPageWith404Error[Handle Non Existent Page With404Error]
@@ -89,11 +65,6 @@ flowchart TD
     WebsiteNavigation_navigateToAboutUsPage --> End
     WebsiteNavigation_navigateToProductsPage --> End
     WebsiteNavigation_navigateToContactPage --> End
-    WebsiteNavigation_navigateToCheckPage --> End
-    WebsiteNavigation_navigateToNewPage --> End
-    WebsiteNavigation_navigateToFinalPage --> End
-    WebsiteNavigation_navigateToOnemorePage --> End
-    WebsiteNavigation_navigateToLastPage --> End
     WebsiteNavigation_accessStatusPageWithSystemInformation --> End
     WebsiteNavigation_handleNonExistentPageWith404Error --> End
     WebsiteNavigation_verifyNavigationMenuIsPresentOnAllPages --> End
