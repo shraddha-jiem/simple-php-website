@@ -4,8 +4,12 @@ This diagram shows the complete test suite structure.
 
 ## Recent Changes
 
-Last 1 commits (excluding auto-generated):
+Last 5 commits (excluding auto-generated):
 - `2be8ed8 Added one page for testing`
+- `d557fd2 Cleanup`
+- `4b4007a Added last page for testing`
+- `73d78bb More changes to fix the highlighting`
+- `ac5649b Added onemore page to test`
 
 🔄 Orange highlighted items indicate recent modifications.
 
@@ -30,7 +34,8 @@ flowchart TD
     DatabaseStatus --> DatabaseStatus_verifyStatusPageLayoutAndStructure
     DatabaseStatus_verifyEnvironmentVariablesUsage[Verify Environment Variables Usage]
     DatabaseStatus --> DatabaseStatus_verifyEnvironmentVariablesUsage
-    WebsiteNavigation[WebsiteNavigation<br/>47 steps]
+    WebsiteNavigation[WebsiteNavigation 🔄<br/>47 steps, 1 modified]
+    style WebsiteNavigation fill:#fff5e6,stroke:#ff8c00,stroke-width:2px
     Start --> WebsiteNavigation
     WebsiteNavigation_displayHomePageByDefault[Display Home Page By Default]
     WebsiteNavigation --> WebsiteNavigation_displayHomePageByDefault

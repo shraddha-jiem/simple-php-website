@@ -33,6 +33,22 @@ class TestDiagramGenerator
         $actualCommitCount = $this->gitChanges['actualCommitCount'] ?? $this->commitsToCheck;
         echo "📊 Checking last {$actualCommitCount} commits for changes (excluding auto-generated)\n";
         
+        // Debug: Show what commits we're analyzing
+        if (!empty($this->gitChanges['commits'])) {
+            echo "🔍 DEBUG: Commits being analyzed:\n";
+            foreach ($this->gitChanges['commits'] as $commit) {
+                echo "   - {$commit}\n";
+            }
+        }
+        
+        // Debug: Show changed files
+        if (!empty($this->gitChanges['files'])) {
+            echo "🔍 DEBUG: Changed files detected:\n";
+            foreach ($this->gitChanges['files'] as $file) {
+                echo "   - {$file}\n";
+            }
+        }
+        
         $testFiles = glob($this->testDir . '/*Cest.php');
         
         foreach ($testFiles as $testFile) {
@@ -156,6 +172,11 @@ class TestDiagramGenerator
             if (strpos($methodName, 'test') === 0 || !in_array($methodName, ['_before', '_after'])) {
                 $steps = $this->analyzeTestMethod($methodBody);
                 $isMethodChanged = $this->isMethodChanged($methodName, $methodBody, $fileChanges);
+                
+                // Debug output for method analysis
+                if ($fileChanges) {
+                    echo "🔍 DEBUG: Method '{$methodName}' changed: " . ($isMethodChanged ? 'YES' : 'NO') . "\n";
+                }
                 
                 $testMethods[$methodName] = [
                     'steps' => $steps,
