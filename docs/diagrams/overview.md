@@ -5,7 +5,7 @@ This diagram shows the complete test suite structure.
 ## Recent Changes
 
 Last 1 commits (excluding auto-generated):
-- `d557fd2 Cleanup`
+- `2be8ed8 Added one page for testing`
 
 🔄 Orange highlighted items indicate recent modifications.
 
@@ -30,7 +30,7 @@ flowchart TD
     DatabaseStatus --> DatabaseStatus_verifyStatusPageLayoutAndStructure
     DatabaseStatus_verifyEnvironmentVariablesUsage[Verify Environment Variables Usage]
     DatabaseStatus --> DatabaseStatus_verifyEnvironmentVariablesUsage
-    WebsiteNavigation[WebsiteNavigation<br/>43 steps]
+    WebsiteNavigation[WebsiteNavigation<br/>47 steps]
     Start --> WebsiteNavigation
     WebsiteNavigation_displayHomePageByDefault[Display Home Page By Default]
     WebsiteNavigation --> WebsiteNavigation_displayHomePageByDefault
@@ -40,6 +40,8 @@ flowchart TD
     WebsiteNavigation --> WebsiteNavigation_navigateToProductsPage
     WebsiteNavigation_navigateToContactPage[Navigate To Contact Page]
     WebsiteNavigation --> WebsiteNavigation_navigateToContactPage
+    WebsiteNavigation_navigateToCheckingPage[Navigate To Checking Page]
+    WebsiteNavigation --> WebsiteNavigation_navigateToCheckingPage
     WebsiteNavigation_accessStatusPageWithSystemInformation[Access Status Page With System Information]
     WebsiteNavigation --> WebsiteNavigation_accessStatusPageWithSystemInformation
     WebsiteNavigation_handleNonExistentPageWith404Error[Handle Non Existent Page With404Error]
@@ -65,6 +67,7 @@ flowchart TD
     WebsiteNavigation_navigateToAboutUsPage --> End
     WebsiteNavigation_navigateToProductsPage --> End
     WebsiteNavigation_navigateToContactPage --> End
+    WebsiteNavigation_navigateToCheckingPage --> End
     WebsiteNavigation_accessStatusPageWithSystemInformation --> End
     WebsiteNavigation_handleNonExistentPageWith404Error --> End
     WebsiteNavigation_verifyNavigationMenuIsPresentOnAllPages --> End

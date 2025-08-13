@@ -59,6 +59,18 @@ sequenceDiagram
     Browser->>App: Verify title: Contact | Simple PHP Website (Master)
     App-->>Browser: Validation Result
 
+    %% Test: Navigate To Checking Page
+    Note over User,DB: Navigate To Checking Page
+    User->>Browser: Navigate to /
+    Browser->>App: HTTP Request
+    App-->>Browser: Page Response
+    Browser->>App: Verify text: Checking
+    App-->>Browser: Validation Result
+    User->>Browser: Click: Checking
+    Browser->>App: Action Request
+    Browser->>App: Verify title: Checking | Simple PHP Website (Master)
+    App-->>Browser: Validation Result
+
     %% Test: Access Status Page With System Information
     Note over User,DB: Access Status Page With System Information
     User->>Browser: Navigate to /

@@ -5,12 +5,12 @@ Auto-generated Mermaid diagrams for test cases with change tracking.
 ## 🔄 Recent Changes
 
 Tracking changes from last 1 commits (excluding auto-generated):
-- `d557fd2 Cleanup`
+- `2be8ed8 Added one page for testing`
 
 ## Test Classes
 
 - [DatabaseStatusCest](databasestatuscest.md) - 46 test steps across 8 methods
-- [WebsiteNavigationCest](websitenavigationcest.md) - 43 test steps across 10 methods
+- [WebsiteNavigationCest](websitenavigationcest.md) - 47 test steps across 11 methods
 
 ## Documentation
 
@@ -25,6 +25,6 @@ Tracking changes from last 1 commits (excluding auto-generated):
 
 ---
 
-*Generated on: 2025-08-13 03:03:00*
+*Generated on: 2025-08-13 03:08:19*
 *Source: Codeception test files in `tests/Acceptance/`*
 *Change tracking: Last 1 commits (excluding auto-generated)*
