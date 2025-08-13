@@ -122,6 +122,19 @@ final class WebsiteNavigationCest
     }
 
 
+    /**
+     * Test: Navigate to Onemore page
+     */
+    public function navigateToOnemorePage(AcceptanceTester $I): void
+    {
+        $I->amOnPage('/');
+        $I->click('Onemore');
+        $I->seeCurrentUrlMatches('/\?page=onemore/');
+        $I->seeInTitle('Onemore | Simple PHP Website (Master)');
+        $I->see('Onemore', 'h2');
+    }
+
+
 
     /**
      * Test: Access Status page with system information

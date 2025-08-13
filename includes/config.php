@@ -20,6 +20,7 @@ function config($key = '')
             'check' => 'Check',
             'newpage' => 'Newpage',
             'final' => 'Final',
+            'onemore' => 'Onemore',
         ],
         'template_path' => 'template',
         'content_path' => 'content',
