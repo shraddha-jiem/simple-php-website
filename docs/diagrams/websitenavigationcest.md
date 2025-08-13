@@ -82,6 +82,20 @@ sequenceDiagram
     App-->>Browser: Validation Result
     end
 
+    %% Test: Navigate To Testing Page 🆕 NEW
+    rect rgb(255, 245, 230)
+    Note over User,DB: Navigate To Testing Page 🆕 NEW
+    User->>Browser: Navigate to / 🔄
+    Browser->>App: HTTP Request
+    App-->>Browser: Page Response
+    Browser->>App: Verify text: Testing 🔄
+    App-->>Browser: Validation Result
+    User->>Browser: Click: Testing 🔄
+    Browser->>App: Action Request
+    Browser->>App: Verify title: Testing | Simple PHP Website (Master) 🔄
+    App-->>Browser: Validation Result
+    end
+
     %% Test: Access Status Page With System Information
     Note over User,DB: Access Status Page With System Information
     User->>Browser: Navigate to /
