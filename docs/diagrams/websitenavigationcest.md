@@ -1,6 +1,13 @@
 # WebsiteNavigationCest Test Flow
 
+🔄 **This test class was recently modified**
+
 This diagram shows the test flow for WebsiteNavigationCest.
+
+## Legend
+- 🆕 **NEW** - Recently added test method
+- 🔄 **MODIFIED** - Recently changed test method
+- Orange background - Indicates recent changes
 
 ```mermaid
 sequenceDiagram
@@ -9,104 +16,109 @@ sequenceDiagram
     participant App as PHP App
     participant DB as Database
 
-    %% Test: Display Home Page By Default
-    Note over User,DB: Display Home Page By Default
-    User->>Browser: Navigate to /
-    Browser->>App: HTTP Request
-    App-->>Browser: Page Response
-    Browser->>App: Verify text: Simple PHP Website (Master)
-    App-->>Browser: Validation Result
-    Browser->>App: Verify text: Home
-    App-->>Browser: Validation Result
-    Browser->>App: Verify text: This is home page
-    App-->>Browser: Validation Result
-    Browser->>App: Verify title: Home | Simple PHP Website (Master)
-    App-->>Browser: Validation Result
+    Note over User,DB: 🔄 RECENTLY MODIFIED
 
-    %% Test: Navigate To About Us Page
-    Note over User,DB: Navigate To About Us Page
-    User->>Browser: Navigate to /
+    %% Test: Display Home Page By Default 🆕 NEW
+    rect rgb(255, 245, 230)
+    Note over User,DB: Display Home Page By Default 🆕 NEW
+    User->>Browser: Navigate to / 🔄
     Browser->>App: HTTP Request
     App-->>Browser: Page Response
-    Browser->>App: Verify text: About Us
+    Browser->>App: Verify text: Simple PHP Website (Master) 🔄
     App-->>Browser: Validation Result
-    User->>Browser: Click: About Us
+    Browser->>App: Verify text: Home 🔄
+    App-->>Browser: Validation Result
+    Browser->>App: Verify text: This is home page 🔄
+    App-->>Browser: Validation Result
+    Browser->>App: Verify title: Home | Simple PHP Website (Master) 🔄
+    App-->>Browser: Validation Result
+    end
+
+    %% Test: Navigate To About Us Page 🆕 NEW
+    rect rgb(255, 245, 230)
+    Note over User,DB: Navigate To About Us Page 🆕 NEW
+    User->>Browser: Navigate to / 🔄
+    Browser->>App: HTTP Request
+    App-->>Browser: Page Response
+    Browser->>App: Verify text: About Us 🔄
+    App-->>Browser: Validation Result
+    User->>Browser: Click: About Us 🔄
     Browser->>App: Action Request
-    Browser->>App: Verify title: About Us | Simple PHP Website (Master)
+    Browser->>App: Verify title: About Us | Simple PHP Website (Master) 🔄
     App-->>Browser: Validation Result
+    end
 
-    %% Test: Navigate To Products Page
-    Note over User,DB: Navigate To Products Page
-    User->>Browser: Navigate to /
+    %% Test: Navigate To Products Page 🆕 NEW
+    rect rgb(255, 245, 230)
+    Note over User,DB: Navigate To Products Page 🆕 NEW
+    User->>Browser: Navigate to / 🔄
     Browser->>App: HTTP Request
     App-->>Browser: Page Response
-    Browser->>App: Verify text: Products
+    Browser->>App: Verify text: Products 🔄
     App-->>Browser: Validation Result
-    User->>Browser: Click: Products
+    User->>Browser: Click: Products 🔄
     Browser->>App: Action Request
-    Browser->>App: Verify title: Products | Simple PHP Website (Master)
+    Browser->>App: Verify title: Products | Simple PHP Website (Master) 🔄
     App-->>Browser: Validation Result
+    end
 
-    %% Test: Navigate To Contact Page
-    Note over User,DB: Navigate To Contact Page
-    User->>Browser: Navigate to /
+    %% Test: Navigate To Contact Page 🆕 NEW
+    rect rgb(255, 245, 230)
+    Note over User,DB: Navigate To Contact Page 🆕 NEW
+    User->>Browser: Navigate to / 🔄
     Browser->>App: HTTP Request
     App-->>Browser: Page Response
-    Browser->>App: Verify text: Contact
+    Browser->>App: Verify text: Contact 🔄
     App-->>Browser: Validation Result
-    User->>Browser: Click: Contact
+    User->>Browser: Click: Contact 🔄
     Browser->>App: Action Request
-    Browser->>App: Verify title: Contact | Simple PHP Website (Master)
+    Browser->>App: Verify title: Contact | Simple PHP Website (Master) 🔄
     App-->>Browser: Validation Result
+    end
 
-    %% Test: Navigate To Check Page
-    Note over User,DB: Navigate To Check Page
-    User->>Browser: Navigate to /
+    %% Test: Navigate To Check Page 🆕 NEW
+    rect rgb(255, 245, 230)
+    Note over User,DB: Navigate To Check Page 🆕 NEW
+    User->>Browser: Navigate to / 🔄
     Browser->>App: HTTP Request
     App-->>Browser: Page Response
-    Browser->>App: Verify text: Check
+    Browser->>App: Verify text: Check 🔄
     App-->>Browser: Validation Result
-    User->>Browser: Click: Check
+    User->>Browser: Click: Check 🔄
     Browser->>App: Action Request
-    Browser->>App: Verify title: Check | Simple PHP Website (Master)
+    Browser->>App: Verify title: Check | Simple PHP Website (Master) 🔄
     App-->>Browser: Validation Result
+    end
 
-    %% Test: Navigate To New Page
-    Note over User,DB: Navigate To New Page
-    User->>Browser: Navigate to /
+    %% Test: Navigate To New Page 🆕 NEW
+    rect rgb(255, 245, 230)
+    Note over User,DB: Navigate To New Page 🆕 NEW
+    User->>Browser: Navigate to / 🔄
     Browser->>App: HTTP Request
     App-->>Browser: Page Response
-    Browser->>App: Verify text: Newpage
+    Browser->>App: Verify text: Newpage 🔄
     App-->>Browser: Validation Result
-    User->>Browser: Click: Newpage
+    User->>Browser: Click: Newpage 🔄
     Browser->>App: Action Request
-    Browser->>App: Verify title: Newpage | Simple PHP Website (Master)
+    Browser->>App: Verify title: Newpage | Simple PHP Website (Master) 🔄
     App-->>Browser: Validation Result
+    end
 
-    %% Test: Navigate To Final Page
-    Note over User,DB: Navigate To Final Page
-    User->>Browser: Navigate to /
+    %% Test: Navigate To Final Page 🆕 NEW
+    rect rgb(255, 245, 230)
+    Note over User,DB: Navigate To Final Page 🆕 NEW
+    User->>Browser: Navigate to / 🔄
     Browser->>App: HTTP Request
     App-->>Browser: Page Response
-    Browser->>App: Verify text: Final
+    Browser->>App: Verify text: Final 🔄
     App-->>Browser: Validation Result
-    User->>Browser: Click: Final
+    User->>Browser: Click: Final 🔄
     Browser->>App: Action Request
-    Browser->>App: Verify title: Final | Simple PHP Website (Master)
+    Browser->>App: Verify title: Final | Simple PHP Website (Master) 🔄
     App-->>Browser: Validation Result
+    end
 
-    %% Test: Navigate To Onemore Page
-    Note over User,DB: Navigate To Onemore Page
-    User->>Browser: Navigate to /
-    Browser->>App: HTTP Request
-    App-->>Browser: Page Response
-    Browser->>App: Verify text: Onemore
-    App-->>Browser: Validation Result
-    User->>Browser: Click: Onemore
-    Browser->>App: Action Request
-    Browser->>App: Verify title: Onemore | Simple PHP Website (Master)
-    App-->>Browser: Validation Result
-
+<<<<<<< Updated upstream
     %% Test: Navigate To Last Page
     Note over User,DB: Navigate To Last Page
     User->>Browser: Navigate to /
@@ -122,20 +134,55 @@ sequenceDiagram
     %% Test: Access Status Page With System Information
     Note over User,DB: Access Status Page With System Information
     User->>Browser: Navigate to /
+=======
+    %% Test: Navigate To Onemore Page 🆕 NEW
+    rect rgb(255, 245, 230)
+    Note over User,DB: Navigate To Onemore Page 🆕 NEW
+    User->>Browser: Navigate to / 🔄
+>>>>>>> Stashed changes
     Browser->>App: HTTP Request
     App-->>Browser: Page Response
-    Browser->>App: Verify text: Status
+    Browser->>App: Verify text: Onemore 🔄
     App-->>Browser: Validation Result
-    Browser->>App: Verify text: Database Status
-    App-->>Browser: Validation Result
-    Browser->>App: Verify text: Environment Information
-    App-->>Browser: Validation Result
-    Browser->>App: Verify text: Infrastructure Features
-    App-->>Browser: Validation Result
-    User->>Browser: Click: Status
+    User->>Browser: Click: Onemore 🔄
     Browser->>App: Action Request
-    Browser->>App: Verify title: Status | Simple PHP Website (Master)
+    Browser->>App: Verify title: Onemore | Simple PHP Website (Master) 🔄
     App-->>Browser: Validation Result
+    end
+
+    %% Test: Navigate To Last Page 🆕 NEW
+    rect rgb(255, 245, 230)
+    Note over User,DB: Navigate To Last Page 🆕 NEW
+    User->>Browser: Navigate to / 🔄
+    Browser->>App: HTTP Request
+    App-->>Browser: Page Response
+    Browser->>App: Verify text: Last 🔄
+    App-->>Browser: Validation Result
+    User->>Browser: Click: Last 🔄
+    Browser->>App: Action Request
+    Browser->>App: Verify title: Last | Simple PHP Website (Master) 🔄
+    App-->>Browser: Validation Result
+    end
+
+    %% Test: Access Status Page With System Information 🆕 NEW
+    rect rgb(255, 245, 230)
+    Note over User,DB: Access Status Page With System Information 🆕 NEW
+    User->>Browser: Navigate to / 🔄
+    Browser->>App: HTTP Request
+    App-->>Browser: Page Response
+    Browser->>App: Verify text: Status 🔄
+    App-->>Browser: Validation Result
+    Browser->>App: Verify text: Database Status 🔄
+    App-->>Browser: Validation Result
+    Browser->>App: Verify text: Environment Information 🔄
+    App-->>Browser: Validation Result
+    Browser->>App: Verify text: Infrastructure Features 🔄
+    App-->>Browser: Validation Result
+    User->>Browser: Click: Status 🔄
+    Browser->>App: Action Request
+    Browser->>App: Verify title: Status | Simple PHP Website (Master) 🔄
+    App-->>Browser: Validation Result
+    end
 
     %% Test: Handle Non Existent Page With404Error
     Note over User,DB: Handle Non Existent Page With404Error
@@ -150,35 +197,39 @@ sequenceDiagram
     %% Test: Verify Navigation Menu Is Present On All Pages
     Note over User,DB: Verify Navigation Menu Is Present On All Pages
 
-    %% Test: Verify Website Footer Information
-    Note over User,DB: Verify Website Footer Information
-    User->>Browser: Navigate to /
+    %% Test: Verify Website Footer Information 🆕 NEW
+    rect rgb(255, 245, 230)
+    Note over User,DB: Verify Website Footer Information 🆕 NEW
+    User->>Browser: Navigate to / 🔄
     Browser->>App: HTTP Request
     App-->>Browser: Page Response
+    end
 
-    %% Test: Verify Active Navigation State
-    Note over User,DB: Verify Active Navigation State
-    User->>Browser: Navigate to /
+    %% Test: Verify Active Navigation State 🆕 NEW
+    rect rgb(255, 245, 230)
+    Note over User,DB: Verify Active Navigation State 🆕 NEW
+    User->>Browser: Navigate to / 🔄
     Browser->>App: HTTP Request
     App-->>Browser: Page Response
-    User->>Browser: Navigate to /?page=about-us
+    User->>Browser: Navigate to /?page=about-us 🔄
     Browser->>App: HTTP Request
     App-->>Browser: Page Response
-    User->>Browser: Navigate to /?page=status
+    User->>Browser: Navigate to /?page=status 🔄
     Browser->>App: HTTP Request
     App-->>Browser: Page Response
-    Browser->>App: Verify text: Home
+    Browser->>App: Verify text: Home 🔄
     App-->>Browser: Validation Result
-    Browser->>App: Verify text: About Us
+    Browser->>App: Verify text: About Us 🔄
     App-->>Browser: Validation Result
-    Browser->>App: Verify text: Status
+    Browser->>App: Verify text: Status 🔄
     App-->>Browser: Validation Result
-    Browser->>App: Verify element: nav.menu a.item.active
+    Browser->>App: Verify element: nav.menu a.item.active 🔄
     App-->>Browser: Validation Result
-    Browser->>App: Verify element: nav.menu a.item.active
+    Browser->>App: Verify element: nav.menu a.item.active 🔄
     App-->>Browser: Validation Result
-    Browser->>App: Verify element: nav.menu a.item.active
+    Browser->>App: Verify element: nav.menu a.item.active 🔄
     App-->>Browser: Validation Result
+    end
 
     %% Test: Verify Page Structure Consistency
     Note over User,DB: Verify Page Structure Consistency
