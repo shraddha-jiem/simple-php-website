@@ -17,6 +17,7 @@ function config($key = '')
             'products' => 'Products',
             'contact' => 'Contact',
             'status' => 'Status',
+            'checking' => 'Checking',
         ],
         'template_path' => 'template',
         'content_path' => 'content',

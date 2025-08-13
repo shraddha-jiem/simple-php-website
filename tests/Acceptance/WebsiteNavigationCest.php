@@ -84,6 +84,19 @@ final class WebsiteNavigationCest
 
 
     /**
+     * Test: Navigate to Checking page
+     */
+    public function navigateToCheckingPage(AcceptanceTester $I): void
+    {
+        $I->amOnPage('/');
+        $I->click('Checking');
+        $I->seeCurrentUrlMatches('/\?page=checking/');
+        $I->seeInTitle('Checking | Simple PHP Website (Master)');
+        $I->see('Checking', 'h2');
+    }
+
+
+    /**
      * Test: Access Status page with system information
      * 
      * Scenario: Access Status page with system information
