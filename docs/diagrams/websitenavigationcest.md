@@ -107,6 +107,18 @@ sequenceDiagram
     Browser->>App: Verify title: Onemore | Simple PHP Website (Master)
     App-->>Browser: Validation Result
 
+    %% Test: Navigate To Last Page
+    Note over User,DB: Navigate To Last Page
+    User->>Browser: Navigate to /
+    Browser->>App: HTTP Request
+    App-->>Browser: Page Response
+    Browser->>App: Verify text: Last
+    App-->>Browser: Validation Result
+    User->>Browser: Click: Last
+    Browser->>App: Action Request
+    Browser->>App: Verify title: Last | Simple PHP Website (Master)
+    App-->>Browser: Validation Result
+
     %% Test: Access Status Page With System Information
     Note over User,DB: Access Status Page With System Information
     User->>Browser: Navigate to /
