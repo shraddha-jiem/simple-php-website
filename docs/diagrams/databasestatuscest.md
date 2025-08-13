@@ -1,6 +1,13 @@
 # DatabaseStatusCest Test Flow
 
+🔄 **This test class was recently modified**
+
 This diagram shows the test flow for DatabaseStatusCest.
+
+## Legend
+- 🆕 **NEW** - Recently added test method
+- 🔄 **MODIFIED** - Recently changed test method
+- Orange background - Indicates recent changes
 
 ```mermaid
 sequenceDiagram
@@ -8,6 +15,8 @@ sequenceDiagram
     participant Browser
     participant App as PHP App
     participant DB as Database
+
+    Note over User,DB: 🔄 RECENTLY MODIFIED
 
     %% Test: Check Database Connection Status
     Note over User,DB: Check Database Connection Status
@@ -75,19 +84,21 @@ sequenceDiagram
     User->>Browser: Click: Status
     Browser->>App: Action Request
 
-    %% Test: Verify Deployment Readiness Information
-    Note over User,DB: Verify Deployment Readiness Information
-    User->>Browser: Navigate to /?page=status
+    %% Test: Verify Deployment Readiness Information 🆕 NEW
+    rect rgb(255, 245, 230)
+    Note over User,DB: Verify Deployment Readiness Information 🆕 NEW
+    User->>Browser: Navigate to /?page=status 🔄
     Browser->>App: HTTP Request
     App-->>Browser: Page Response
-    Browser->>App: Verify text: ready for deployment to AWS
+    Browser->>App: Verify text: ready for automatic deployment to AWS 🔄
     App-->>Browser: Validation Result
-    Browser->>App: Verify text: Terraform
+    Browser->>App: Verify text: Terraform 🔄
     App-->>Browser: Validation Result
-    Browser->>App: Verify text: Terragrunt
+    Browser->>App: Verify text: Terragrunt 🔄
     App-->>Browser: Validation Result
-    Browser->>App: Verify text: infrastructure management
+    Browser->>App: Verify text: infrastructure management 🔄
     App-->>Browser: Validation Result
+    end
 
     %% Test: Verify Database Configuration Display
     Note over User,DB: Verify Database Configuration Display

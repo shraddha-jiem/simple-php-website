@@ -5,6 +5,7 @@ This diagram shows the complete test suite structure.
 ## Recent Changes
 
 Last 10 commits (excluding auto-generated):
+- `2e53960 Modified the status page`
 - `dedc213 Added Testing page to test doc generation`
 - `7867799 AI changes`
 - `2be8ed8 Added one page for testing`
@@ -14,14 +15,14 @@ Last 10 commits (excluding auto-generated):
 - `ac5649b Added onemore page to test`
 - `8c99884 Updated docs`
 - `571145c New page and testcases added for final`
-- `e0b9f7d Fixed the highlighting`
 
 🔄 Orange highlighted items indicate recent modifications.
 
 ```mermaid
 flowchart TD
     Start([Test Suite Start])
-    DatabaseStatus[DatabaseStatus<br/>46 steps]
+    DatabaseStatus[DatabaseStatus 🔄<br/>46 steps, 1 modified]
+    style DatabaseStatus fill:#fff5e6,stroke:#ff8c00,stroke-width:2px
     Start --> DatabaseStatus
     DatabaseStatus_checkDatabaseConnectionStatus[Check Database Connection Status]
     DatabaseStatus --> DatabaseStatus_checkDatabaseConnectionStatus

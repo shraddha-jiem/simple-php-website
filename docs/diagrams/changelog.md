@@ -2,12 +2,11 @@
 
 Recent changes to test files in the last 10 commits (excluding auto-generated).
 
-Generated: 2025-08-13 03:26:29
+Generated: 2025-08-13 03:39:54
 
 ```mermaid
 gitgraph
     commit id: "Baseline"
-    commit id: "Fixed the highlighting"
     commit id: "New page and testcases added f..."
     commit id: "Updated docs"
     commit id: "Added onemore page to test"
@@ -17,9 +16,18 @@ gitgraph
     commit id: "Added one page for testing"
     commit id: "AI changes"
     commit id: "Added Testing page to test doc..."
+    commit id: "Modified the status page"
 ```
 
 ## Detailed Changes
+
+### tests/Acceptance/DatabaseStatusCest.php
+
+**Added lines:**
+- `$I->see('ready for automatic deployment to AWS');`
+
+**Removed lines:**
+- ~~`$I->see('ready for deployment to AWS');`~~
 
 ### tests/Acceptance/WebsiteNavigationCest.php
 
@@ -37,5 +45,5 @@ gitgraph
 - ~~`$I->click('Check');`~~
 - ~~`$I->seeCurrentUrlMatches('/\?page=check/');`~~
 - ~~`$I->seeInTitle('Check | Simple PHP Website (Master)');`~~
-- ... and 35 more
+- ... and 47 more
 
