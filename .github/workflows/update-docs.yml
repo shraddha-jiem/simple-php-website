@@ -26,7 +26,8 @@ jobs:
     - name: Generate test documentation
       run: |
         chmod +x generate-docs.sh
-        ./generate-docs.sh 3
+        # Use 10 commits to ensure we capture actual changes, not auto-commits
+        ./generate-docs.sh 10
     
     - name: Check for changes
       id: verify-changed-files

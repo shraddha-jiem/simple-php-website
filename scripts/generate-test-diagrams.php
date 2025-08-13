@@ -30,7 +30,8 @@ class TestDiagramGenerator
     public function generateAll(): void
     {
         echo "🔍 Analyzing test files in {$this->testDir}/\n";
-        echo "📊 Checking last {$this->commitsToCheck} commits for changes\n";
+        $actualCommitCount = $this->gitChanges['actualCommitCount'] ?? $this->commitsToCheck;
+        echo "📊 Checking last {$actualCommitCount} commits for changes (excluding auto-generated)\n";
         
         $testFiles = glob($this->testDir . '/*Cest.php');
         
@@ -44,7 +45,7 @@ class TestDiagramGenerator
         
         echo "✅ Generated " . count($this->diagrams) . " diagrams in {$this->outputDir}/\n";
         if (!empty($this->gitChanges['files'])) {
-            echo "🔄 Highlighted changes from last {$this->commitsToCheck} commits\n";
+            echo "🔄 Highlighted changes from last {$actualCommitCount} commits\n";
         }
     }
 
@@ -57,19 +58,45 @@ class TestDiagramGenerator
         }
 
         try {
-            // Get changed files in recent commits
-            $changedFiles = shell_exec("git diff --name-only HEAD~{$this->commitsToCheck}..HEAD");
+            // Get all recent commits (more than needed to filter out auto-commits)
+            $allCommits = shell_exec("git log --oneline -n " . ($this->commitsToCheck * 3));
+            $allCommitsArray = $allCommits ? array_filter(explode("\n", trim($allCommits))) : [];
+            
+            // Filter out auto-generated commits
+            $realCommits = [];
+            foreach ($allCommitsArray as $commit) {
+                // Skip commits that are auto-generated documentation updates
+                if (!preg_match('/🤖.*Auto-update.*diagrams?/', $commit)) {
+                    $realCommits[] = $commit;
+                    if (count($realCommits) >= $this->commitsToCheck) {
+                        break;
+                    }
+                }
+            }
+            
+            // If we don't have enough real commits, use what we have
+            $commitsToUse = min(count($realCommits), $this->commitsToCheck);
+            
+            if ($commitsToUse === 0) {
+                echo "⚠️  No non-auto-generated commits found\n";
+                $this->gitChanges = ['files' => [], 'commits' => [], 'testChanges' => []];
+                return;
+            }
+            
+            echo "🔍 Found {$commitsToUse} real commits (excluding auto-generated)\n";
+            
+            // Get changed files using the filtered commit range
+            $changedFiles = shell_exec("git diff --name-only HEAD~{$commitsToUse}..HEAD");
             $changedFiles = $changedFiles ? array_filter(explode("\n", trim($changedFiles))) : [];
             
-            // Get commit information
-            $commitInfo = shell_exec("git log --oneline -n {$this->commitsToCheck}");
-            $commits = $commitInfo ? array_filter(explode("\n", trim($commitInfo))) : [];
+            // Get commit information (use the filtered commits)
+            $commits = array_slice($realCommits, 0, $commitsToUse);
             
             // Get detailed changes for test files
             $testFileChanges = [];
             foreach ($changedFiles as $file) {
                 if (strpos($file, 'tests/') === 0 && strpos($file, 'Cest.php') !== false) {
-                    $changes = shell_exec("git diff HEAD~{$this->commitsToCheck}..HEAD --unified=3 '$file'");
+                    $changes = shell_exec("git diff HEAD~{$commitsToUse}..HEAD --unified=3 '$file'");
                     $testFileChanges[$file] = $this->parseGitDiff($changes);
                 }
             }
@@ -78,7 +105,8 @@ class TestDiagramGenerator
                 'files' => $changedFiles,
                 'commits' => $commits,
                 'testChanges' => $testFileChanges,
-                'timestamp' => date('Y-m-d H:i:s')
+                'timestamp' => date('Y-m-d H:i:s'),
+                'actualCommitCount' => $commitsToUse
             ];
             
         } catch (Exception $e) {
@@ -354,13 +382,15 @@ class TestDiagramGenerator
         
         $diagram .= "```\n";
         
+        $actualCommitCount = $this->gitChanges['actualCommitCount'] ?? $this->commitsToCheck;
+        
         $content = "# Test Suite Overview\n\n";
         $content .= "This diagram shows the complete test suite structure.\n\n";
         
         // Add recent changes summary
         if (!empty($this->gitChanges['commits'])) {
             $content .= "## Recent Changes\n\n";
-            $content .= "Last {$this->commitsToCheck} commits:\n";
+            $content .= "Last {$actualCommitCount} commits (excluding auto-generated):\n";
             foreach ($this->gitChanges['commits'] as $commit) {
                 $content .= "- `{$commit}`\n";
             }
@@ -392,7 +422,8 @@ class TestDiagramGenerator
         $diagram .= "```\n";
         
         $content = "# Test Changes Timeline\n\n";
-        $content .= "Recent changes to test files in the last {$this->commitsToCheck} commits.\n\n";
+        $actualCommitCount = $this->gitChanges['actualCommitCount'] ?? $this->commitsToCheck;
+        $content .= "Recent changes to test files in the last {$actualCommitCount} commits (excluding auto-generated).\n\n";
         $content .= "Generated: {$this->gitChanges['timestamp']}\n\n";
         
         $content .= $diagram;
@@ -437,8 +468,9 @@ class TestDiagramGenerator
         
         // Add changes summary
         if (!empty($this->gitChanges['commits'])) {
+            $actualCommitCount = $this->gitChanges['actualCommitCount'] ?? $this->commitsToCheck;
             $readme .= "## 🔄 Recent Changes\n\n";
-            $readme .= "Tracking changes from last {$this->commitsToCheck} commits:\n";
+            $readme .= "Tracking changes from last {$actualCommitCount} commits (excluding auto-generated):\n";
             foreach (array_slice($this->gitChanges['commits'], 0, 3) as $commit) {
                 $readme .= "- `{$commit}`\n";
             }
@@ -465,8 +497,10 @@ class TestDiagramGenerator
             $readme .= "- [Change Timeline](changelog.md) - Recent modifications\n";
         }
         
+        $actualCommitCount = $this->gitChanges['actualCommitCount'] ?? $this->commitsToCheck;
+        
         $readme .= "\n## Legend\n\n";
-        $readme .= "- 🔄 **Recently Modified** - Changed in last {$this->commitsToCheck} commits\n";
+        $readme .= "- 🔄 **Recently Modified** - Changed in last {$actualCommitCount} commits (excluding auto-generated)\n";
         $readme .= "- 🆕 **New** - Recently added test methods\n";
         $readme .= "- Orange highlighting - Indicates recent changes\n";
         
@@ -475,7 +509,7 @@ class TestDiagramGenerator
         $readme .= "*Source: Codeception test files in `tests/Acceptance/`*\n";
         
         if (!empty($this->gitChanges['commits'])) {
-            $readme .= "*Change tracking: Last {$this->commitsToCheck} commits*\n";
+            $readme .= "*Change tracking: Last {$actualCommitCount} commits (excluding auto-generated)*\n";
         }
         
         file_put_contents($this->outputDir . '/README.md', $readme);
