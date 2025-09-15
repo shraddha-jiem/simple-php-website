@@ -7,7 +7,7 @@
         "php": ">=7.4"
     },
     "require-dev": {
-        "codeception/codeception": "^5.0",
+        "codeception/codeception": "4.1.0",
         "codeception/module-webdriver": "^4.0",
         "codeception/module-rest": "^3.0",
         "codeception/module-phpbrowser": "^3.0",
